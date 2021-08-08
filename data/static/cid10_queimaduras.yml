@@ -1,0 +1,53 @@
+codigos:
+  'Elétrica':
+    - W85 #Exposição linhas transm. de corrente elétrica
+    - W86 #Exposição a outra corrente elétrica espec.
+    - W87 #Exposição a corrente elétrica NE
+    - X33 #Vitima de raio
+  'Calor/Térmica':
+    - W35 #Explosão ou ruptura de caldeira
+    - W36 #Explosão ou ruptura de cilindro de gás
+    - W38 #Explosão ruptura outra ap. pressurizados espec.
+    - W39 #Queima de fogos de artificio
+    - W40 #Explosão de outra materiais
+    - W92 #Exposição calor excessivo orig. artificial
+    - X00 #Expos fogo n-contr. edifício outra tipo constr
+    - X01 #Expos fogo n-contr fora edif out tipo constr
+    - X02 #Exposição fogo contr edif outr tipo constr
+    - X03 #Expos fogo contr fora edif outr tipo constr
+    - X04 #Exposição combustão subst muito inflamavel
+    - X05 #Exposição a combustão de roupa de dormir
+    - X06 #Exposição combustão outr tipo roupa acessor
+    - X08 #Exposição outr tipo espec fumaca fogo chamas
+    - X09 #Exposição a tipo NE de fumaca fogo chamas
+    - X10 #Contato bebid alim gord oleo cozinha quentes
+    - X11 #Contato c/agua corrente quente de torneira
+    - X12 #Contato c/outr liquidos quentes
+    - X13 #Contato c/vapor dagua e c/vapores quentes
+    - X14 #Contato c/ar e gases quentes
+    - X15 #Contato c/aparelhos domesticos quentes
+    - X16 #Contato c/aquecedores radiadores e tubulacao
+    - X17 #Contato motores maquinas ferramentas quentes
+    - X18 #Contato c/outr metais quentes
+    - X19 #Contato outr fontes calor subst quentes NE
+    - X30 #Exposição a calor natural excessivo
+    - X75 #Lesão autoprov intenc p/disp explosivos
+    - X76 #Lesão autoprov intenc fumaca fogo e chamas
+    - X77 #Lesão autor int vapor agua gas  obj quente
+    - X88 #Agressão p/meio de gases e vapores
+    - X96 #Agressão p/meio de material explosivo
+    - X97 #Agressão p/meio de fumaca fogo e chamas
+    - X98 #Agressão vapor agua gases ou objetos quentes
+    - Y25 #Contato c/material explosivo intenc n det
+    - Y26 #Exposição fumaça fogo chamas intenc n det
+    - Y27 #Exposição vapor agua gas obj quente int n det
+  'Química':
+    - X86 #Agressao p/meio de subst corrosivas
+  'Outros (geladura, radiação)':
+    - W88 #Exposição a radiação ionizante
+    - W89 #Expos fontes luminosas artificiais visíveis luz ultravioleta
+    - W90 #Exposição outra tipos radiação não ionizante
+    - W91 #Exposição a tipo NE de radiação
+    - W93 #Exposição frio excessivo origem artificial
+    - X31 #Exposição a frio natural excessivo
+    - X32 #Exposição a luz solar
