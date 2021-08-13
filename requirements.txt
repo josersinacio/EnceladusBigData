@@ -89,6 +89,7 @@ quantecon==0.5.1
 rasterio==1.2.6
 rasterstats==0.15.0
 ratelim==0.1.6
+redis==3.5.3
 requests==2.26.0
 Rtree==0.9.7
 scikit-image==0.18.2
