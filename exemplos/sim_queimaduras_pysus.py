@@ -1,5 +1,4 @@
 from os import makedirs
-from numpy import number, string_
 from pysus.online_data.SIM import download
 import pickle
 import redis
@@ -31,7 +30,7 @@ estados = [
 anos = [2014, 2015, 2016, 2017, 2018, 2019]
 
 
-def get_queimaduras(estado: str, ano: number,  tipo: str, codigos: list):
+def get_queimaduras(estado: str, ano: int,  tipo: str, codigos: list):
     print(f'Obtendo registros de queimaduras para {estado} em {ano}')
     print(f'Obtendo registros de queimaduras do tipo "{tipo}"')
     print(f'Obtendo registros de queimaduras para os códigos {codigos}')

@@ -1,4 +1,39 @@
-codigos:
+anos:
+  - 2014
+  - 2015
+  - 2016
+  - 2017
+  - 2018
+  - 2019
+estados:
+  - AC
+  - AL
+  - AP
+  - AM
+  - BA
+  - CE
+  - DF
+  - ES
+  - GO
+  - MA
+  - MT
+  - MS
+  - MG
+  - PA
+  - PB
+  - PR
+  - PE
+  - PI
+  - RJ
+  - RN
+  - RS
+  - RO
+  - RR
+  - SC
+  - SP
+  - SE
+  - TO
+codigosCid10:
   'Elétrica':
     - W85 #Exposição linhas transm. de corrente elétrica
     - W86 #Exposição a outra corrente elétrica espec.
