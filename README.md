@@ -14,8 +14,12 @@ TCC - Mineração de Informações em Epidemiologia
 ### Instalar GDAL (Necesário para PySUS)
 
 ```bash
-sudo apt-get install gdal-bin
-sudo apt-get install libgdal-dev libgdal1h
+sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+sudo apt update
+sudo apt upgrade
+sudo apt-get install g++
+sudo apt-get install python3-dev
+sudo apt install gdal-bin libgdal-dev
 ```
 
 ### Instalar Venv
