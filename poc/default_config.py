@@ -23,4 +23,4 @@ class DefaultConfig:
                 return dict()
 
 
-
+defaultConfig = DefaultConfig()

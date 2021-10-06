@@ -4,6 +4,9 @@ from botocore.exceptions import ClientError
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
+import logging
+
+logger = logging.getLogger(__name__)
 
 def send_email(to: str, subject: str, message: str):
     SENDER = 'Enceladus Big Data <enceladus.bigdata@hotmail.com>'
@@ -60,9 +63,10 @@ def send_email(to: str, subject: str, message: str):
 
     msg.attach(att)
 
-    # Try to send the email.
+
     try:
-        #Provide the contents of the email.
+        logger.info('Enviando relatório por e-mail com destinatário para %s.', to)
+
         response = client.send_raw_email(
             Destinations=[
                 RECIPIENT
@@ -77,7 +81,6 @@ def send_email(to: str, subject: str, message: str):
         )
     # Display an error if something goes wrong.	
     except ClientError as e:
-        print(e.response['Error']['Message'])
+        logger.error('Erro ao enviar e-mail', e.response['Error']['Message'], exc_info=True)
     else:
-        print("Email sent! Message ID:"),
-        print(response['MessageId'])
+        logger.info("E-mail enviado! ID da mensagem: %s", response['MessageId'])
