@@ -8,7 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def send_email(to: str, subject: str, message: str):
+def send_email(to: str, subject: str, attachment: str):
     SENDER = 'Enceladus Big Data <enceladus.bigdata@hotmail.com>'
     RECIPIENT = to
     CONFIGURATION_SET = 'Default'
@@ -55,7 +55,7 @@ def send_email(to: str, subject: str, message: str):
     msg_body.attach(textpart)
     msg_body.attach(htmlpart)
 
-    att = MIMEApplication(message)
+    att = MIMEApplication(attachment)
 
     att.add_header('Content-Disposition','attachment', filename = ATTACHMENT)
 

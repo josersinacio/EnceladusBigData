@@ -35,10 +35,11 @@ def codigos_cid10():
 async def get_queimaduras():
 
     estados_param = request.args.getlist('estado')
-    anos_param = request.args.getlist('ano')
+    ano_inicio_param = request.args.get('ano_inicio')
+    ano_fim_param = request.args.get('ano_fim')
     email_param = request.args.get('email') 
 
-    asyncio.get_event_loop().run_in_executor(None, preparar_e_enviar_async, estados_param, anos_param, email_param)
+    asyncio.get_event_loop().run_in_executor(None, preparar_e_enviar_async, estados_param, ano_inicio_param, ano_fim_param, email_param)
 
     return dict(destino=email_param, id_requisicao=str(uuid.uuid1())), 202
 
