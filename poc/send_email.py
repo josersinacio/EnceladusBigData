@@ -8,7 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def send_email(to: str, subject: str, attachment: str):
+def send_email(to: str, subject: str, file_name: str,  attachment: str):
     SENDER = 'Enceladus Big Data <enceladus.bigdata@hotmail.com>'
     RECIPIENT = to
     CONFIGURATION_SET = 'Default'
@@ -36,7 +36,7 @@ def send_email(to: str, subject: str, attachment: str):
 
     CHARSET = 'UTF-8'
 
-    ATTACHMENT = 'relatorio.csv'
+    ATTACHMENT = file_name
 
     client = boto3.client('ses', region_name = AWS_REGION)
 

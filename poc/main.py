@@ -1,6 +1,6 @@
 from quart import Quart, request, jsonify
 from default_config import defaultConfig
-from queimaduras import preparar_e_enviar_async
+import queimaduras
 from pathlib import Path
 import logging.config
 import os.path
@@ -32,14 +32,26 @@ def codigos_cid10():
 
 
 @app.route('/tabelas/queimaduras')
-async def get_queimaduras():
+async def get_tabela_queimaduras():
 
     estados_param = request.args.getlist('estado')
     ano_inicio_param = request.args.get('ano_inicio')
     ano_fim_param = request.args.get('ano_fim')
     email_param = request.args.get('email') 
 
-    asyncio.get_event_loop().run_in_executor(None, preparar_e_enviar_async, estados_param, ano_inicio_param, ano_fim_param, email_param)
+    asyncio.get_event_loop().run_in_executor(None, queimaduras.preparar_e_enviar_tabela_async, estados_param, ano_inicio_param, ano_fim_param, email_param)
+
+    return dict(destino=email_param, id_requisicao=str(uuid.uuid1())), 202
+
+@app.route('/diagramas/queimaduras')
+async def get_diagrama_queimaduras():
+
+    estados_param = request.args.getlist('estado')
+    ano_inicio_param = request.args.get('ano_inicio')
+    ano_fim_param = request.args.get('ano_fim')
+    email_param = request.args.get('email') 
+
+    asyncio.get_event_loop().run_in_executor(None, queimaduras.preparar_e_enviar_diagrama_async, estados_param, ano_inicio_param, ano_fim_param, email_param)
 
     return dict(destino=email_param, id_requisicao=str(uuid.uuid1())), 202
 
