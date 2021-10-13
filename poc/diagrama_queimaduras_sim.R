@@ -1,6 +1,7 @@
 library(microdatasus)
-library(ggplot2)
 library(dplyr)
+library(stringi)
+library(stringr)
 
 args <- commandArgs(TRUE)
 
@@ -26,15 +27,7 @@ codigos = c(
   "W88", "W89", "W90", "W91", "W93", "X31", "X32"
 )
 
-datalist = list()
-
-for (i in 1:5) {
-  # ... make some data
-  dat <- data.frame(x = rnorm(10), y = runif(10))
-  dat$i <- i  # maybe you want to keep track of which iteration produced it?
-  datalist[[i]] <- dat # add it to your list
-}
-
+regex <- stri_paste(codigos, collapse='|')
 
 datalist = list()
 
@@ -45,7 +38,7 @@ for (i in 1:length(estados)) {
     uf = estados[[i]], 
     information_system = "SIM-DO")
   
-  dados_filtrados <- filter(dados, CAUSABAS %in% codigos | CAUSABAS_O %in% codigos)
+  dados_filtrados <- filter(dados, str_detect(CAUSABAS, regex) | str_detect(CAUSABAS_O, regex))
   
   datalist[[i]] <- dados_filtrados
 }
