@@ -39,7 +39,7 @@ def preparar_e_enviar_tabela_async(estados: list, ano_inicio: int, ano_fim: int,
         logger.info('Preparando para envio do relátorio de %s em %s com destinatário a %s.', estados, [ano_inicio, ano_fim], email)
 
         with open(file_path) as f:
-            send_email(email, f'Relatório para {", ".join(estados)} {_formatar_intervalo(ano_inicio, ano_fim)}',  'relátorio.pdf', f.read())
+            send_email(email, f'Relatório para {", ".join(estados)} {_formatar_intervalo(ano_inicio, ano_fim)}',  'relátorio.csv', f.read())
 
 def preparar_e_enviar_diagrama_async(estados: str, ano_inicio: int, ano_fim: int, email: str):
 
