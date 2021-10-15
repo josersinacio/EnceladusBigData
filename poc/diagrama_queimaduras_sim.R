@@ -58,4 +58,7 @@ pie(ocorrencias$Freq, labels = ocorrencias$Freq, col = colors)
 
 legend("topleft", legend = ocorrencias$Var2, fill = colors)
 
+#mostra o total de casos de cada municipio
+#TODO
+
 dev.off()

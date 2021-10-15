@@ -49,4 +49,7 @@ big_data<- bind_rows(datalist)
 
 dados_processados <- process_sim(big_data)
 
-write.csv(dados_processados, nome_arquivo)
+#Deleta colunas se completamente preenchidas por 'NA'
+dados_finais <- dados_processados[, colSums(is.na(dados_processados)) < nrow(dados_processados)]
+
+write.csv(dados_finais, nome_arquivo)
