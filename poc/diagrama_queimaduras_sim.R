@@ -4,6 +4,8 @@ library(stringi)
 library(stringr)
 library(gridExtra)
 library(grid)
+library(lubridate)
+library(plyr)
 
 args <- commandArgs(TRUE)
 
@@ -79,5 +81,16 @@ for (conjunto in conjuntos){
   grid.newpage() # Cria uma nova página
   grid.table(conjunto)
 }
+
+## Mostrar a contagem mensal
+## TODO DTOBITO
+grid.newpage()
+
+for(DT_OBITO in dados_processados$DTOBITO){
+ dados_processados$DTOBITO <- format(as.Date(DT_OBITO, origin="1970-01-01"))
+}
+grid.table(dados_processados$DTOBITO)
+#dados_mensais <- aggregate(dados_processados$ORIGEM, by=list(dados_processados$DT_OBITO), sum)
+
 
 dev.off()
