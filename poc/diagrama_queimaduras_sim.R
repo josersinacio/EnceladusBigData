@@ -2,6 +2,8 @@ library(microdatasus)
 library(dplyr)
 library(stringi)
 library(stringr)
+library(gridExtra)
+library(grid)
 
 args <- commandArgs(TRUE)
 
@@ -48,6 +50,8 @@ big_data  <- bind_rows(datalist)
 
 dados_processados <- process_sim(big_data)
 
+## DIAGRAMA DE LOCAL 
+
 ocorrencias <- as.data.frame(t(table(dados_processados$LOCOCOR)))
 
 colors <- rainbow(length(ocorrencias$Freq))
@@ -58,7 +62,22 @@ pie(ocorrencias$Freq, labels = ocorrencias$Freq, col = colors)
 
 legend("topleft", legend = ocorrencias$Var2, fill = colors)
 
+## TABELA DE CASOS POR CIDADE/MUNICIPIO
+
 #mostra o total de casos de cada municipio
-#TODO
+dados_finais <- setNames(
+                  aggregate(
+                  x = as.integer(dados_processados$ORIGEM), # Base para contador (agregando)
+                  by = list(dados_processados$munResNome), # Identifica o que está duplicado
+                  FUN = sum),
+                  c("Municipios", "Total de Casos")) # Nomeia as colunas
+
+# Divide as paginas a cada 24 registros
+conjuntos <- split(dados_finais,seq(nrow(dados_finais))%/%24) 
+
+for (conjunto in conjuntos){
+  grid.newpage() # Cria uma nova página
+  grid.table(conjunto)
+}
 
 dev.off()

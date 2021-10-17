@@ -49,7 +49,8 @@ big_data<- bind_rows(datalist)
 
 dados_processados <- process_sim(big_data)
 
-#Deleta colunas se completamente preenchidas por 'NA'
+# Deleta colunas se completamente preenchidas por 'NA'
 dados_finais <- dados_processados[, colSums(is.na(dados_processados)) < nrow(dados_processados)]
 
+# Retorna tabela de todos os registros com base na limpeza feita previamente
 write.csv(dados_finais, nome_arquivo)
