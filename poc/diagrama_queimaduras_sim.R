@@ -58,7 +58,7 @@ ocorrencias <- as.data.frame(t(table(dados_processados$LOCOCOR)))
 
 colors <- rainbow(length(ocorrencias$Freq))
 
-pdf(nome_arquivo, paper = "a4r", width = 8.3, height = 11.7)
+pdf(nome_arquivo, paper = "a4r", width = 9, height = 11.7)
 
 pie(ocorrencias$Freq, labels = ocorrencias$Freq, col = colors)
 
@@ -108,6 +108,7 @@ dados_finais <- dados_finais[, c("Municipio", meses, "Total")]
 conjuntos <- split(dados_finais,seq(nrow(dados_finais)) %/% 24) 
 
 for (conjunto in conjuntos) {
+  row.names(conjunto) <- NULL
   grid.newpage() # Cria uma nova página
   grid.table(conjunto)
 }
