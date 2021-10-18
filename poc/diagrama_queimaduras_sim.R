@@ -58,7 +58,7 @@ ocorrencias <- as.data.frame(t(table(dados_processados$LOCOCOR)))
 
 colors <- rainbow(length(ocorrencias$Freq))
 
-pdf(nome_arquivo, paper="a4")
+pdf(nome_arquivo, paper="a4r")
 
 pie(ocorrencias$Freq, labels = ocorrencias$Freq, col = colors)
 
@@ -66,8 +66,10 @@ legend("topleft", legend = ocorrencias$Var2, fill = colors)
 
 ## TABELA DE CASOS POR CIDADE/MUNICIPIO
 
+# Isola os nomes de municipios
 municipios <- unique(dados_processados$munResNome)
 
+#soma o total de casos em cada municipio
 dados_finais <- setNames(
   aggregate(
     x = as.integer(dados_processados$ORIGEM), # Base para contador (agregando)
@@ -98,6 +100,7 @@ for(i in 1:nrow(dados_finais)) {
   
 }
 
+# Cria header com o nome das colunas
 dados_finais <- dados_finais[, c("Municipio", 
                                  "Jan",
                                  "Fev",
@@ -114,7 +117,7 @@ dados_finais <- dados_finais[, c("Municipio",
                                  "Total")]
 
 
-# Divide as paginas a cada 24 registros
+# Divide as paginas a cada 22 registros
 conjuntos <- split(dados_finais,seq(nrow(dados_finais)) %/% 22) 
 
 for (conjunto in conjuntos) {
