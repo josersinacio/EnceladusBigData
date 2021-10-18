@@ -58,7 +58,7 @@ ocorrencias <- as.data.frame(t(table(dados_processados$LOCOCOR)))
 
 colors <- rainbow(length(ocorrencias$Freq))
 
-pdf(nome_arquivo, paper="a4r")
+pdf(nome_arquivo, paper = "a4r", width = 8.3, height = 11.7)
 
 pie(ocorrencias$Freq, labels = ocorrencias$Freq, col = colors)
 
@@ -101,27 +101,13 @@ for(i in 1:nrow(dados_finais)) {
 }
 
 # Cria header com o nome das colunas
-dados_finais <- dados_finais[, c("Municipio", 
-                                 "Jan",
-                                 "Fev",
-                                 "Mar",
-                                 "Abr",
-                                 "Mai",
-                                 "Jun",
-                                 "Jul",
-                                 "Ago",
-                                 "Set",
-                                 "Out",
-                                 "Nov",
-                                 "Dez", 
-                                 "Total")]
+dados_finais <- dados_finais[, c("Municipio", meses, "Total")]
 
 
 # Divide as paginas a cada 22 registros
-conjuntos <- split(dados_finais,seq(nrow(dados_finais)) %/% 22) 
+conjuntos <- split(dados_finais,seq(nrow(dados_finais)) %/% 24) 
 
 for (conjunto in conjuntos) {
-  
   grid.newpage() # Cria uma nova página
   grid.table(conjunto)
 }
