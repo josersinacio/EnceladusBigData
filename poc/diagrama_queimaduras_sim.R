@@ -33,7 +33,7 @@ codigos = c(
 
 regex <- stri_paste(codigos, collapse='|')
 
-datalist = list()
+datalist <- list()
 
 for (i in 1:length(estados)) {
   dados <- fetch_datasus(
@@ -66,31 +66,64 @@ legend("topleft", legend = ocorrencias$Var2, fill = colors)
 
 ## TABELA DE CASOS POR CIDADE/MUNICIPIO
 
-#mostra o total de casos de cada municipio
+municipios <- unique(dados_processados$munResNome)
+
 dados_finais <- setNames(
-                  aggregate(
-                  x = as.integer(dados_processados$ORIGEM), # Base para contador (agregando)
-                  by = list(dados_processados$munResNome), # Identifica o que está duplicado
-                  FUN = sum),
-                  c("Municipios", "Total de Casos")) # Nomeia as colunas
+  aggregate(
+    x = as.integer(dados_processados$ORIGEM), # Base para contador (agregando)
+    by = list(dados_processados$munResNome), # Identifica o que está duplicado
+    FUN = sum),
+  c("Municipio", "Total")) # Nomeia as colunas
+
+meses = c("Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez")
+
+for (mes in meses) {
+  dados_finais[[mes]] <- vector(length = nrow(dados_finais))
+}
+
+
+for(i in 1:nrow(dados_finais)) {
+  municipio <- dados_finais[i,]
+  
+  regex <- "\\d{4}-01-\\d{2}"
+  
+  for (i in 1:12) {
+    mes <- meses[[i]]
+  
+    
+    dados_finais[dados_finais$Municipio == municipio$Municipio, mes] <- nrow(
+      dados_processados %>%
+        filter(munResNome == municipio$Municipio & as.numeric(strftime(DTOBITO, "%m")) == i))
+  }
+  
+}
+
+dados_finais <- dados_finais[, c("Municipio", 
+                                 "Jan",
+                                 "Fev",
+                                 "Mar",
+                                 "Abr",
+                                 "Mai",
+                                 "Jun",
+                                 "Jul",
+                                 "Ago",
+                                 "Set",
+                                 "Out",
+                                 "Nov",
+                                 "Dez", 
+                                 "Total")]
+
 
 # Divide as paginas a cada 24 registros
-conjuntos <- split(dados_finais,seq(nrow(dados_finais))%/%24) 
+conjuntos <- split(dados_finais,seq(nrow(dados_finais)) %/% 22) 
 
-for (conjunto in conjuntos){
+for (conjunto in conjuntos) {
+  
   grid.newpage() # Cria uma nova página
   grid.table(conjunto)
 }
 
-## Mostrar a contagem mensal
-## TODO DTOBITO
-grid.newpage()
-
-for(DT_OBITO in dados_processados$DTOBITO){
- dados_processados$DTOBITO <- format(as.Date(DT_OBITO, origin="1970-01-01"))
-}
-grid.table(dados_processados$DTOBITO)
-#dados_mensais <- aggregate(dados_processados$ORIGEM, by=list(dados_processados$DT_OBITO), sum)
+grid.newpage() 
 
 
 dev.off()
