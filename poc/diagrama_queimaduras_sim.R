@@ -58,7 +58,7 @@ ocorrencias <- as.data.frame(t(table(dados_processados$LOCOCOR)))
 
 colors <- rainbow(length(ocorrencias$Freq))
 
-pdf(nome_arquivo)
+pdf(nome_arquivo, paper="a4")
 
 pie(ocorrencias$Freq, labels = ocorrencias$Freq, col = colors)
 
@@ -122,8 +122,5 @@ for (conjunto in conjuntos) {
   grid.newpage() # Cria uma nova página
   grid.table(conjunto)
 }
-
-grid.newpage() 
-
 
 dev.off()
