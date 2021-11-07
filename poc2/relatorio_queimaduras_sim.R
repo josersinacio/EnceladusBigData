@@ -46,29 +46,51 @@ dados <- fetch_datasus(
 big_data <- filter(dados, str_detect(CAUSABAS, regex) | str_detect(CAUSABAS_O, regex))
 
 
-dados_processados <- process_sim(big_data)
+dados_processados = process_sim(big_data)
 
-dados_processados <- subset(dados_processados, DTOBITO> data_inicio & DTOBITO < data_fim)
+dados_processados = subset(dados_processados, DTOBITO> data_inicio & DTOBITO < data_fim)
 
 print(names(dados_processados))
 
 ## DIAGRAMA DE LOCAL 
 
-pdf(nome_arquivo, paper = "a4r", width = 9, height = 11.7)
-
 ## TABELA DE CASOS POR CIDADE/MUNICIPIO
 
 #soma o total de casos em cada municipio
-dados_finais <- setNames(
-  aggregate(
-    x = as.integer(dados_processados$ORIGEM), # Base para contador (agregando)
-    by = list(dados_processados$CODMUNRES), # Identifica o que está duplicado
-    FUN = sum),
-  c("CODMUNRES", "Total")) # Nomeia as colunas
+dados_finais = dados_processados %>%                
+  group_by(across(all_of(c("CODMUNRES", "munResNome")))) %>% 
+  tally()   # Now summarise with unique elements 
 
-foo <- function(cod){which(CODMUNRES == cod)[1]}
 
-dados_finais[["Município"]] <- apply(dados_processados, dados_finais$CODMUNRES, foo)[["munResNome"]]
+projecao_populacional = read.csv("/home/josersi/projects/epidemiotcc/data/static/populacao-estimada-2020.csv")
+
+projecao_populacional$city_ibge_code = as.character(projecao_populacional$city_ibge_code)
+projecao_populacional$city_ibge_code <- substr(projecao_populacional$city_ibge_code, 1, 6)
+
+dados_finais[["POPULACAO"]] <- NA
+dados_finais[["DENSIDADE"]] <- NA
+dados_finais[["UF"]] <- NA
+dados_finais = filter(dados_finais, substr(CODMUNRES, 3, 6) != "0000")
+dados_finais = as.data.frame(dados_finais)
+
+print(head(projecao_populacional))
+
+for(i in rownames(dados_finais)) {
+  codigo_municipio = dados_finais[[i, "CODMUNRES"]]
+
+  projecao = projecao_populacional[projecao_populacional$city_ibge_code == codigo_municipio, "estimated_population"]
+    
+  dados_finais[[i, "POPULACAO"]] = projecao
+  dados_finais[[i, "DENSIDADE"]] = (dados_finais[[i, "n"]] / projecao) * 100000
+}
+
+dados_finais$DENSIDADE = formatC(dados_finais$DENSIDADE, format = "f", digits = 2, decimal.mark = ",")
+
+dados_finais = dados_finais[, c("CODMUNRES", "munResNome", "POPULACAO", "n", "DENSIDADE")]
+colnames(dados_finais) <- c("Código", "Município", "População*", "Casos", "por 100 mil hab.")
+
+
+pdf(nome_arquivo, paper = "a4r", width = 9, height = 11.7)
 
 # Divide as páginas a cada 24 registros
 conjuntos <- split(dados_finais,seq(nrow(dados_finais)) %/% 24) 
@@ -81,3 +103,4 @@ for (conjunto in conjuntos) {
 
 dev.off()
 
+warnings()

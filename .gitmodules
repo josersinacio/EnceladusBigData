@@ -1,0 +1,3 @@
+[submodule "censo-ibge"]
+	path = censo-ibge
+	url = git@github.com:turicas/censo-ibge.git
