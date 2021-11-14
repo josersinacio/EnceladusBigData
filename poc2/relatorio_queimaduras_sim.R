@@ -6,6 +6,7 @@ library(stringr)
 library(gridExtra)
 library(grid)
 library(lubridate)
+require(rmarkdown)
 
 
 args <- commandArgs(TRUE)
@@ -50,7 +51,7 @@ big_data <- filter(dados, str_detect(CAUSABAS, regex) | str_detect(CAUSABAS_O, r
 
 dados_processados = process_sim(big_data)
 
-dados_processados = subset(dados_processados, DTOBITO> data_inicio & DTOBITO < data_fim)
+dados_processados = subset(dados_processados, as.Date(DTOBITO)> data_inicio & as.Date(DTOBITO)< data_fim)
 
 ## DIAGRAMA DE LOCAL 
 
@@ -86,18 +87,11 @@ dados_finais$DENSIDADE = formatC(dados_finais$DENSIDADE, format = "f", digits = 
 dados_finais = dados_finais[, c("CODMUNRES", "munResNome", "POPULACAO", "n", "DENSIDADE")]
 colnames(dados_finais) <- c("Código", "Município", "População*", "Casos", "por 100 mil hab.")
 
+write.csv(dados_finais, "poc2/relatorio_queimaduras_sim.csv")
 
-pdf(nome_arquivo, paper = "a4r", width = 9, height = 11.7)
-
-# Divide as páginas a cada 24 registros
-conjuntos <- split(dados_finais,seq(nrow(dados_finais)) %/% 24) 
-
-for (conjunto in conjuntos) {
-  row.names(conjunto) <- NULL
-  grid.newpage() # Cria uma nova página
-  grid.table(conjunto)
-}
-
-dev.off()
-
-warnings()
+rmarkdown::render("poc2/relatorio_queimadura.Rmd", output_file = nome_arquivo, params = list(
+  output_directory = getwd(),
+  dt_inicio = data_inicio,
+  dt_fim = data_fim,
+  uf = estado
+  ))

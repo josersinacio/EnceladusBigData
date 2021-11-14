@@ -47,7 +47,7 @@ def preparar_e_enviar_relatorio_async(estado: str, data_inicio: str, data_fim: s
 
 
     with open(file_path, 'rb') as f:
-        send_email(email, f'Diagrama de distribuição do local de falecimento para {estado}, {_formatar_intervalo(data_inicio, data_fim)}', 'relatorio.pdf', f.read())
+        send_email(email, f'Relatório de densidade municipal por período - {estado}, {_formatar_intervalo(data_inicio, data_fim)}', 'relatorio_densidade_municipal.pdf', f.read())
 
 
 def listar_relatorios_processados():
