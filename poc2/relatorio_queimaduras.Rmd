@@ -2,25 +2,44 @@
 title: "Relatório de Queimaduras"
 output: pdf_document
 params: 
-    relatorio: "relatorio_queimaduras_sim.csv"
-    output_directory: ""
+    municipios_com_casos: "municipios_com_casos.csv"
+    municipios_sem_casos: "municipios_sem_casos.csv"
     dt_inicio: ""
     dt_fim: ""
     uf: ""
+header-includes:
+    - \usepackage{caption}
 ---
+
+\captionsetup[table]{labelformat=empty}
 
 ###  Mortalidade por queimadura entre `r format(params$dt_inicio, '%d/%m/%Y')` e `r format(params$dt_fim, '%d/%m/%Y')` no estado `r params$uf`
 _OBS: o relatório considera o municipio de residencia da vítima._
 
 ``` {r, echo = FALSE}
+options(digits = 2)
 library(knitr)
-dataset <- read.csv(file.path(params$output_directory, params$relatorio))
-kable(dataset, caption = "Densidade Municipal por Período")
+
+kable(
+    municipios_com_casos, 
+    caption = "Densidade Municipal por Período", 
+    col.names = c("Município", "População", "Casos", "por 100 mil hab."),
+    format.args = list(decimal.mark = ",", big.mark = "."),
+    row.names = TRUE
+)
+
+kable(
+    municipios_sem_casos,
+    caption = "Municípios sem casos registrados",
+    col.names = c("Município", "População"),
+    format.args = list(decimal.mark = ",", big.mark = "."),
+    row.names = TRUE
+)
 ```
 
-###  Para fins de filtragem os seguintes códigos CID foram considerados:
+### Para fins de filtragem os seguintes códigos CID foram considerados:
 
-*  Queimaduras por Eletricidade:
+* Queimaduras por Eletricidade:
     + W85 - Exposição a linhas transm. de corrente elétrica
     + W86 - Exposição a outra corrente elétrica espec.
     + W87 - Exposição a corrente elétrica NE
@@ -64,10 +83,10 @@ kable(dataset, caption = "Densidade Municipal por Período")
     + Y26 - Exposição a fumaça, fogo e chamas, intenção não determinada
     + Y27 - Exposição a vapor de água, gases ou objetos quentes, intenção não determinada
 
-*  Queimaduras Químicas:
+* Queimaduras Químicas:
     + X86 - Agressão por meio de substâncias corrosivas
 
-*  Outros (geladura, radiação):
+* Outros (geladura, radiação):
     + W88 - Exposição a radiação ionizante
     + W89 - Exposição fontes luminosas artificiais visíveis luz ultravioleta
     + W90 - Exposição outra tipos radiação não ionizante
