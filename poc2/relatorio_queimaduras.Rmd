@@ -4,6 +4,7 @@ output: pdf_document
 params: 
     municipios_com_casos: "municipios_com_casos.csv"
     municipios_sem_casos: "municipios_sem_casos.csv"
+    contagem_por_tipo: "contagem_por_tipo.csv"
     dt_inicio: ""
     dt_fim: ""
     uf: ""
@@ -13,31 +14,67 @@ header-includes:
 
 \captionsetup[table]{labelformat=empty}
 
-###  Mortalidade por queimadura entre `r format(params$dt_inicio, '%d/%m/%Y')` e `r format(params$dt_fim, '%d/%m/%Y')` no estado `r params$uf`
+Mortalidade por queimadura entre `r format(params$dt_inicio, '%d/%m/%Y')` e `r format(params$dt_fim, '%d/%m/%Y')` no estado `r params$uf`.
+
 _OBS: o relatório considera o municipio de residencia da vítima._
 
-``` {r, echo = FALSE}
+## Estratificação por tipo de queimadura
+
+```{r, echo = FALSE}
+contagem_por_tipo <- read.csv(params$contagem_por_tipo)
+yrange <- range(pretty(c(0, ceiling(max(contagem_por_tipo$quantidade) * 1.25))))
+
+barplot(
+    height = contagem_por_tipo$quantidade,
+    names = c("Elétrica", "Calor/Térmica", "Química", "Geladura e Radiação"),
+    col = rgb(0.8, 0.1, 0.1, 0.6),
+    ylim = yrange
+) %>%
+    text(
+        contagem_por_tipo$quantidade,
+        contagem_por_tipo$quantidade,
+        cex = 0.8,
+        pos = 3
+    )
+
+```
+\pagebreak
+
+## Densidade municipal no período
+
+### Municípios com casos registrados
+
+```{r, echo = FALSE}
 options(digits = 2)
 library(knitr)
 
+
 kable(
-    municipios_com_casos, 
-    caption = "Densidade Municipal por Período", 
+    municipios_com_casos,
     col.names = c("Município", "População", "Casos", "por 100 mil hab."),
     format.args = list(decimal.mark = ",", big.mark = "."),
     row.names = TRUE
 )
 
+```
+\pagebreak
+
+### Municípios sem casos registrados
+
+```{r, echo = FALSE}
+options(digits = 2)
+library(knitr)
+
 kable(
     municipios_sem_casos,
-    caption = "Municípios sem casos registrados",
     col.names = c("Município", "População"),
     format.args = list(decimal.mark = ",", big.mark = "."),
     row.names = TRUE
 )
 ```
+\pagebreak
 
-### Para fins de filtragem os seguintes códigos CID foram considerados:
+## Códigos CID10 que foram considerados
 
 * Queimaduras por Eletricidade:
     + W85 - Exposição a linhas transm. de corrente elétrica

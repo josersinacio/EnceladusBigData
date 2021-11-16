@@ -18,7 +18,7 @@ ano_inicio <- strftime(data_inicio, "%Y")
 ano_fim <- strftime(data_fim, "%Y")
 
 codigos_causa_eletrica <- c("W85", "W86", "W87", "X33");
-codigos_causa_calor_e_termica <- c(
+codigos_causa_clr_e_term <- c(
   "W35", "W36", "W38", "W39", "W40", "W92", "X00", "X01", "X02",
   "X03", "X04", "X05", "X06", "X08", "X09", "X10", "X11", "X12",
   "X13", "X14", "X15", "X16", "X17", "X18", "X19", "X30", "X75",
@@ -33,14 +33,12 @@ codigos <- c(
   # Elétrica
   codigos_causa_eletrica,
   # Calor e Térmica
-  codigos_causa_calor_e_termica,
+  codigos_causa_clr_e_term,
   # Química
   codigos_causa_quimica,
   # Outros (geladura, radiação)
   codigos_causa_gelad_e_rad
 )
-
-regex <- stri_paste(codigos, collapse = "|")
 
 
 dados <- fetch_datasus(
@@ -50,11 +48,20 @@ dados <- fetch_datasus(
   information_system = "SIM-DO"
 )
 
-big_data <- subset(dados,
-  str_detect(CAUSABAS, regex) | str_detect(CAUSABAS_O, regex)
-)
+filtrar_por_causas <- function(df, codigos) {
+  regex <- stringi::stri_paste(codigos, collapse = "|")
 
-dados_processados <- process_sim(big_data) %>%
+  big_data <- subset(
+    df,
+    str_detect(CAUSABAS, regex) | str_detect(CAUSABAS_O, regex)
+  )
+
+  return(big_data)
+}
+
+dados_filtrados <- filtrar_por_causas(dados, codigos)
+
+dados_processados <- process_sim(dados_filtrados) %>%
   janitor::clean_names()
 
 dados_processados <- subset(dados_processados,
@@ -63,6 +70,26 @@ dados_processados <- subset(dados_processados,
     & substr(codmunres, 3, 6) != "0000"
 )
 
+contar_por_causas <- function(df, codigos) {
+  regex <- stringi::stri_paste(codigos, collapse = "|")
+
+  big_data <- subset(
+    df,
+    str_detect(causabas, regex) | str_detect(causabas_o, regex)
+  )
+
+  return(nrow(big_data))
+}
+
+contagem_por_tipo <- data.frame(
+  tipo = c("eletrica", "clr_e_term", "quimica", "gelad_e_rad"),
+  quantidade = c(
+    contar_por_causas(dados_processados, codigos_causa_eletrica),
+    contar_por_causas(dados_processados, codigos_causa_clr_e_term),
+    contar_por_causas(dados_processados, codigos_causa_quimica),
+    contar_por_causas(dados_processados, codigos_causa_gelad_e_rad)
+  )
+)
 
 ## DIAGRAMA DE LOCAL
 
@@ -121,6 +148,12 @@ write.csv(
 write.csv(
   municipios_sem_casos,
   "poc2/municipios_sem_casos.csv",
+  row.names = FALSE
+)
+
+write.csv(
+  contagem_por_tipo,
+  "poc2/contagem_por_tipo.csv",
   row.names = FALSE
 )
 
