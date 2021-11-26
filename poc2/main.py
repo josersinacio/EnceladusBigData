@@ -59,43 +59,41 @@ async def post_relatorio_queimaduras():
 
     return dict(destino=email_param, id_requisicao=str(uuid.uuid1())), 202
 
-if __name__ == '__main__':
 
-    app_home = os.path.join(Path.home(), '.enceladus', 'logs')
 
-    os.makedirs(app_home, exist_ok=True)
+app_home = os.path.join(Path.home(), '.enceladus', 'logs')
+os.makedirs(app_home, exist_ok=True)
 
-    logging_config = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'formatters': {
-            'standard': {
-                'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
-            },
+logging_config = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
         },
-        'handlers': {
-            'file_handler': {
-                'class': 'logging.FileHandler',
-                'level': 'DEBUG',
-                'formatter': 'standard',
-                'filename': os.path.join(app_home, 'application.log'),
-                'encoding': 'utf8'
-            },
-            'console_handler': {
-                'class': 'logging.StreamHandler',
-                'level': 'INFO',
-                'formatter': 'standard',
-            },
+    },
+    'handlers': {
+        'file_handler': {
+            'class': 'logging.FileHandler',
+            'level': 'DEBUG',
+            'formatter': 'standard',
+            'filename': os.path.join(app_home, 'application.log'),
+            'encoding': 'utf8'
         },
-        'loggers': {
-            '': {
-                'handlers': ['file_handler', 'console_handler'],
-                'level': 'DEBUG',
-                'propagate': False
-            }
+        'console_handler': {
+            'class': 'logging.StreamHandler',
+            'level': 'INFO',
+            'formatter': 'standard',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file_handler', 'console_handler'],
+            'level': 'DEBUG',
+            'propagate': False
         }
     }
+}
+logging.config.dictConfig(logging_config)
 
-    logging.config.dictConfig(logging_config)
-
-    app.run(debug=True)
+#app.run(debug=True)
