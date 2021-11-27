@@ -1,4 +1,5 @@
 from quart import Quart, request, jsonify, Response
+from quart_cors import cors
 from default_config import defaultConfig
 import queimaduras
 from pathlib import Path
@@ -9,6 +10,7 @@ import uuid
 import os
 
 app = Quart(__name__)
+app = cors(app, allow_origin="*")
 
 def fire_and_forget(f):
     def wrapped(*args, **kwargs):
@@ -96,4 +98,5 @@ logging_config = {
 }
 logging.config.dictConfig(logging_config)
 
-#app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)

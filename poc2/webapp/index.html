@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enceladus Big Data</title>
+</head>
+<body>
+    
+  <pre id="responsePreview"></pre>
+
+  <script>
+    const baseUrl = 'http://ec2-3-21-234-58.us-east-2.compute.amazonaws.com:5000';
+
+    window.addEventListener('load', async () => {
+      responsePreview.innerHTML = await buscarRelatoriosProcessados();
+    })
+
+
+    async function buscarRelatoriosProcessados() {
+      const response = await fetch(`${baseUrl}/relatorios/queimaduras/densidade-municipal-por-periodo/processados`, { mode: 'no-cors' });
+
+      console.log(await response.text())
+      
+      return await response.json();
+    }
+  </script>
+</body>
+</html>
