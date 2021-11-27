@@ -20,7 +20,7 @@
       <label class="Signika--500">Tipo de Relatório: Mortalidade por queimadura</label>
     </div>
     <br>
-    <form onsubmit="processar()" class="novoPedido--form">
+    <form onsubmit="processar(); return false;" class="novoPedido--form">
       <label class="novoPedido--label Signika--300">
         Estado
 
@@ -77,18 +77,28 @@
     const baseUrl = 'http://ec2-3-21-234-58.us-east-2.compute.amazonaws.com:5000';
 
     window.addEventListener('load', async () => {
+      
+      await atualizarTabela();
+
+      setInterval(atualizarTabela, 2000);            
+    })
+
+    async function atualizarTabela() {
       const relatorios = await buscarRelatoriosProcessados();
 
-      //responsePreview.innerHTML = JSON.stringify(relatorios, null, 2);
-      
-      relatorios.forEach(function (relatoriosProcessados){
+      linhasProcessadas.innerHTML = '';
+
+      relatorios.forEach(relatorio => {
+
+        const dataInicial = formatarDate(relatorio.data_inicio);
+        const dataFinal = formatarDate(relatorio.data_fim);
 
         linhasProcessadas.innerHTML += `
         <tr>
-        <td class="estadoProcessado Signika--300">${relatoriosProcessados.estado}</td>
-        <td class="dataInicioProcessado Signika--300">${relatoriosProcessados.data_inicio}</td>
-        <td class="dataFimProcessado Signika--300">${relatoriosProcessados.data_fim}</td>
-        <td class="downloadProcessado Signika--300"><a href='${baseUrl+relatoriosProcessados.uri}'> Baixar PDF </a></td> 
+          <td class="estadoProcessado Signika--300">${relatorio.estado}</td>
+          <td class="dataInicioProcessado Signika--300">${dataInicial}</td>
+          <td class="dataFimProcessado Signika--300">${dataFinal}</td>
+          <td class="downloadProcessado Signika--300"><a href='${baseUrl + relatorio.uri}'> Baixar PDF </a></td> 
         </tr>`;
       });
 
@@ -100,16 +110,39 @@
 
         estadosSelect.appendChild(estadoOption);
       }
-    })
-
-    async function processar() {
     }
 
+    async function processar() {
+      const enviarForm = new URL(`${baseUrl}/relatorios/queimaduras/densidade-municipal-poar-periodo`);
+
+      enviarForm.searchParams.append("estado", estadosSelect.value);
+      enviarForm.searchParams.append("data_inicio", dataInicialInput.value);
+      enviarForm.searchParams.append("data_fim", dataFinalInput.value);
+      enviarForm.searchParams.append("email", emailInput.value);
+
+      try {
+        const response = await fetch(enviarForm.href, { method: 'POST' });
+        const body = await response.json();
+
+        alert(`Relatório enviado para processamento!\nCódigo: ${body.id_requisicao}`);
+      } catch (ex) {
+        alert('Erro ao processar relatório!');
+      } 
+    }
 
     async function buscarRelatoriosProcessados() {
       const response = await fetch(`${baseUrl}/relatorios/queimaduras/densidade-municipal-por-periodo/processados`);
 
       return response.json();
+    }
+
+    function formatarDate(dateString) {
+      const date = new Date(dateString);
+
+      // Corrige timezone [https://stackoverflow.com/a/16048201]
+      date.setTime(date.getTime() + date.getTimezoneOffset() * 60 * 1_000);
+
+      return date.toLocaleDateString();
     }
 
     function getEstados() {
