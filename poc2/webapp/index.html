@@ -1,48 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Signika:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
   <title>Enceladus Big Data</title>
+</head>
 
-  <section>
-    <form onsubmit="processar()">
-      <label>
+<body>
+  <section class="novoPedido--section">
+
+    <h2 class="Signika--700">Solicitar Novo Relatório</h2>
+    <div class="relatorioTipo">
+      <label class="Signika--500">Tipo de Relatório: Mortalidade por queimadura</label>
+    </div>
+    <br>
+    <form onsubmit="processar()" class="novoPedido--form">
+      <label class="novoPedido--label Signika--300">
         Estado
 
         <select id="estadosSelect" required>
           <option>Selecione</option>
         </select>
       </label>
-
-      <label>
+      
+      <label class="novoPedido--label Signika--300">
         Data inicial
 
         <input id="dataInicialInput" type="date" min="2013-01-01" max="2019-12-31" required>
       </label>
 
-      <label>
+      <label class="novoPedido--label Signika--300">
         Data final
 
         <input id="dataFinalInput" type="date" min="2013-01-01" max="2019-12-31" required>
       </label>
 
-      <button type="submit">Processar</button>
+      <label class="novoPedido--label Signika--300">
+        E-mail
+
+        <input id="emailInput" type="email" required>
+      </label>
+
+      <button type="submit" class="Signika--500">Processar</button>
     </form>
   </section>
 
-  <style>
-    code {
-      white-space: pre-wrap;
-    }
-  </style>
-</head>
+  <section class="relatoriosProcessados--section">
+    <h2  class="Signika--700">Relatórios Processados</h2>
 
-<body>
+    <table class="relatoriosProcessados--table">
 
-  <code id="responsePreview"></code>
+      <tr class="Signika--500">
+        <th>Estado</th>
+        <th>Data de Inicio</th>
+        <th>Data de Fim</th>
+        <th>Download</th>
+      </tr>
+
+      <tbody id="linhasProcessadas"></body>
+
+    </table>
+  </section>
+
+  <footer class="Signika--500">
+    <div>Como usar | Criado por </div>
+    <div>&copy; Copyright 2021, Enceladus Big Data</div>
+  </footer>
 
   <script>
     const baseUrl = 'http://ec2-3-21-234-58.us-east-2.compute.amazonaws.com:5000';
@@ -50,7 +79,18 @@
     window.addEventListener('load', async () => {
       const relatorios = await buscarRelatoriosProcessados();
 
-      responsePreview.innerHTML = JSON.stringify(relatorios, null, 2);
+      //responsePreview.innerHTML = JSON.stringify(relatorios, null, 2);
+      
+      relatorios.forEach(function (relatoriosProcessados){
+
+        linhasProcessadas.innerHTML += `
+        <tr>
+        <td class="estadoProcessado Signika--300">${relatoriosProcessados.estado}</td>
+        <td class="dataInicioProcessado Signika--300">${relatoriosProcessados.data_inicio}</td>
+        <td class="dataFimProcessado Signika--300">${relatoriosProcessados.data_fim}</td>
+        <td class="downloadProcessado Signika--300"><a href='${baseUrl+relatoriosProcessados.uri}'> Baixar PDF </a></td> 
+        </tr>`;
+      });
 
       for (const estado of getEstados()) {
         const estadoOption = document.createElement("option");
@@ -63,7 +103,6 @@
     })
 
     async function processar() {
-      
     }
 
 

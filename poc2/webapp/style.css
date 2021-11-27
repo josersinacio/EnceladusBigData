@@ -1,0 +1,81 @@
+/* FONT CLASSES */
+.Signika--700{
+    font-family: 'Signika', sans-serif;
+    font-weight: 700;
+}
+
+.Signika--300{
+    font-family: 'Signika', sans-serif;
+    font-weight: 300;
+}
+
+.Signika--500{
+    font-family: 'Signika', sans-serif;
+    font-weight: 500;
+}
+
+/* TAGS CSS */
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+button {
+    cursor: pointer;
+}
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: whitesmoke;
+    color: #212121;
+    text-align: center;
+  }
+
+  footer div{
+    padding: .2em;
+  }
+
+a:link, 
+a:visited, 
+a:hover, 
+a:active {
+    text-decoration: none;
+}
+
+/* CLASSES CSS */
+.relatorioTipo{
+    bottom: 1em;
+}
+.novoPedido--section{
+    padding: 1em;
+    background-color: whitesmoke;
+    text-align: center;
+}
+
+.novoPedido--label{
+    padding: 0.5em;
+}
+
+.relatoriosProcessados--section{
+    text-align: center;
+    
+}
+
+.relatoriosProcessados--table{
+    text-align: center;
+    display: inline;
+}
+
+.relatoriosProcessados--table th{
+    padding: 0.8em;
+    background-color: lightgrey;
+}
+
+.relatoriosProcessados--table tbody{
+    background-color: whitesmoke;
+}
+
