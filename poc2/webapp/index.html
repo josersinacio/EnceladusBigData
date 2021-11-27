@@ -1,30 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enceladus Big Data</title>
+
+  <section>
+    <form onsubmit="processar()">
+      <label>
+        Estado
+
+        <select id="estadosSelect" required>
+          <option>Selecione</option>
+        </select>
+      </label>
+
+      <label>
+        Data inicial
+
+        <input id="dataInicialInput" type="date" min="2013-01-01" max="2019-12-31" required>
+      </label>
+
+      <label>
+        Data final
+
+        <input id="dataFinalInput" type="date" min="2013-01-01" max="2019-12-31" required>
+      </label>
+
+      <button type="submit">Processar</button>
+    </form>
+  </section>
+
+  <style>
+    code {
+      white-space: pre-wrap;
+    }
+  </style>
 </head>
+
 <body>
-    
-  <pre id="responsePreview"></pre>
+
+  <code id="responsePreview"></code>
 
   <script>
     const baseUrl = 'http://ec2-3-21-234-58.us-east-2.compute.amazonaws.com:5000';
 
     window.addEventListener('load', async () => {
-      responsePreview.innerHTML = await buscarRelatoriosProcessados();
+      const relatorios = await buscarRelatoriosProcessados();
+
+      responsePreview.innerHTML = JSON.stringify(relatorios, null, 2);
+
+      for (const estado of getEstados()) {
+        const estadoOption = document.createElement("option");
+
+        estadoOption.value = estado.sigla;
+        estadoOption.innerText = estado.nome;
+
+        estadosSelect.appendChild(estadoOption);
+      }
     })
+
+    async function processar() {
+      
+    }
 
 
     async function buscarRelatoriosProcessados() {
-      const response = await fetch(`${baseUrl}/relatorios/queimaduras/densidade-municipal-por-periodo/processados`, { mode: 'no-cors' });
+      const response = await fetch(`${baseUrl}/relatorios/queimaduras/densidade-municipal-por-periodo/processados`);
 
-      console.log(await response.text())
-      
-      return await response.json();
+      return response.json();
+    }
+
+    function getEstados() {
+      return [
+        {
+          "nome": "Acre",
+          "sigla": "AC",
+          "observacao": "Localizado na Região Norte"
+        },
+        {
+          "nome": "Alagoas",
+          "sigla": "AL",
+          "observacao": "Localizado na Região Nordeste"
+        },
+        {
+          "nome": "Amapá",
+          "sigla": "AP",
+          "observacao": "Localizado na Região Norte"
+        },
+        {
+          "nome": "Amazonas",
+          "sigla": "AM",
+          "observacao": "Localizado na Região Norte"
+        },
+        {
+          "nome": "Bahia",
+          "sigla": "BA",
+          "observacao": "Localizado na Região Nordeste"
+        },
+        {
+          "nome": "Ceará",
+          "sigla": "CE",
+          "observacao": "Localizado na Região Nordeste"
+        },
+        {
+          "nome": "Distrito Federal",
+          "sigla": "DF",
+          "observacao": "Localizado na Região Centro-Oeste"
+        },
+        {
+          "nome": "Espírito Santo",
+          "sigla": "ES",
+          "observacao": "Localizado na Região Sudeste"
+        },
+        {
+          "nome": "Goiás",
+          "sigla": "GO",
+          "observacao": "Localizado na Região Centro-Oeste"
+        },
+        {
+          "nome": "Maranhão",
+          "sigla": "MA",
+          "observacao": "Localizado na Região Nordeste"
+        },
+        {
+          "nome": "Mato Grosso",
+          "sigla": "MT",
+          "observacao": "Localizado na Região Centro-Oeste"
+        },
+        {
+          "nome": "Mato Grosso do Sul",
+          "sigla": "MS",
+          "observacao": "Localizado na Região Centro-Oeste"
+        },
+        {
+          "nome": "Minas Gerais",
+          "sigla": "MG",
+          "observacao": "Localizado na Região Sudeste"
+        },
+        {
+          "nome": "Pará",
+          "sigla": "PA",
+          "observacao": "Localizado na Região Norte"
+        },
+        {
+          "nome": "Paraíba",
+          "sigla": "PB",
+          "observacao": "Localizado na Região Nordeste"
+        },
+        {
+          "nome": "Paraná",
+          "sigla": "PR",
+          "observacao": "Localizado na Região Sul"
+        },
+        {
+          "nome": "Pernambuco",
+          "sigla": "PE",
+          "observacao": "Localizado na Região Nordeste"
+        },
+        {
+          "nome": "Piauí",
+          "sigla": "PI",
+          "observacao": "Localizado na Região Nordeste"
+        },
+        {
+          "nome": "Rio de Janeiro",
+          "sigla": "RJ",
+          "observacao": "Localizado na Região Sudeste"
+        },
+        {
+          "nome": "Rio Grande do Norte",
+          "sigla": "RN",
+          "observacao": "Localizado na Região Nordeste"
+        },
+        {
+          "nome": "Rio Grande do Sul",
+          "sigla": "RS",
+          "observacao": "Localizado na Região Sul"
+        },
+        {
+          "nome": "Rondônia",
+          "sigla": "RO",
+          "observacao": "Localizado na Região Norte"
+        },
+        {
+          "nome": "Roraima",
+          "sigla": "RR",
+          "observacao": "Localizado na Região Norte"
+        },
+        {
+          "nome": "Santa Catarina",
+          "sigla": "SC",
+          "observacao": "Localizado na Região Sul"
+        },
+        {
+          "nome": "São Paulo",
+          "sigla": "SP",
+          "observacao": "Localizado na Região Sudeste"
+        },
+        {
+          "nome": "Sergipe",
+          "sigla": "SE",
+          "observacao": "Localizado na Região Nordeste"
+        },
+        {
+          "nome": "Tocantins",
+          "sigla": "TO",
+          "observacao": "Localizado na Região Norte"
+        }
+      ]
     }
   </script>
 </body>
+
 </html>
