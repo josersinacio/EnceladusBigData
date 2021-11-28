@@ -1,0 +1,103 @@
+anos:
+  - 2014
+  - 2015
+  - 2016
+  - 2017
+  - 2018
+  - 2019
+estados:
+  - AC
+  - AL
+  - AP
+  - AM
+  - BA
+  - CE
+  - DF
+  - ES
+  - GO
+  - MA
+  - MT
+  - MS
+  - MG
+  - PA
+  - PB
+  - PR
+  - PE
+  - PI
+  - RJ
+  - RN
+  - RS
+  - RO
+  - RR
+  - SC
+  - SP
+  - SE
+  - TO
+codigosCid10:
+  'Elétrica':
+    - W85 #Exposição a linhas transm. de corrente elétrica
+    - W86 #Exposição a outra corrente elétrica espec.
+    - W87 #Exposição a corrente elétrica NE
+    - X33 #Vitima de raio
+  'Calor/Térmica':
+    - W35 #Explosão ou ruptura de caldeira
+    - W36 #Explosão ou ruptura de cilindro de gás
+    - W38 #Explosão ruptura outra ap. pressurizados espec.
+    - W39 #Queima de fogos de artificio
+    - W40 #Explosão de outra materiais
+    - W92 #Exposição a calor excessivo de orig. artificial
+    - X00 #Exposição a fogo não-controlado em um edifício ou outro tipo de construção - residência
+    - X01 #Exposição a fogo não-controlado fora de um edifício ou de outro tipo de construção
+    - X02 #Exposição a fogo controlado em um edifício ou outro tipo de construção - residência
+    - X03 #Exposição a fogo controlado fora de um edifício ou de outro tipo de construção - residência
+    - X04 #Exposição a combustão de substância muito inflamável - residência
+    - X05 #Exposição a combustão de roupa de dormir
+    - X06 #Exposição a combustão de outro tipo de roupa ou de acessórios - residência
+    - X08 #Exposição a outro tipo especificado de fumaça, fogo ou chamas - residência
+    - X09 #Exposição a tipo não especificado de fumaça, fogo ou chamas - residência
+    - X10 #Contato com bebidas, alimentos, gordura e óleo de cozinha quentes - residência
+    - X11 #Contato c/agua corrente quente de torneira
+    - X12 #Contato c/outros liquidos quentes
+    - X13 #Contato c/vapor dagua e c/vapores quentes
+    - X14 #Contato c/ar e gases quentes
+    - X15 #Contato c/aparelhos domesticos quentes
+    - X16 #Contato c/aquecedores radiadores e tubulacao
+    - X17 #Contato c/ motores, maquinas ou ferramentas quentes
+    - X18 #Contato c/outros metais quentes
+    - X19 #Contato com outras fontes de calor ou com substâncias quentes não especificados - residência
+    - X30 #Exposição a calor natural excessivo
+    - X75 #Lesão autoprovocada intencionalmente por dispositivos explosivos - residência
+    - X76 #Lesão autoprovocada intencionalmente pela fumaça, pelo fogo e por chamas - residência
+    - X77 #Lesão autoprovocada intencionalmente por vapor de água, gases ou objetos quentes - residência
+    - X88 #Agressão p/meio de gases e vapores
+    - X96 #Agressão p/meio de material explosivo
+    - X97 #Agressão p/meio de fumaca fogo e chamas
+    - X98 #Agressão por meio de vapor de água, gases ou objetos quentes - residência
+    - Y25 #Contato com material explosivo, intenção não determinada - residência
+    - Y26 #Exposição a fumaça, fogo e chamas, intenção não determinada - residência
+    - Y27 #Exposição a vapor de água, gases ou objetos quentes, intenção não determinada - residência
+  'Química':
+    - X86 #Agressão por meio de substâncias corrosivas - residência
+  'Outros (geladura, radiação)':
+    - W88 #Exposição a radiação ionizante
+    - W89 #Exposição fontes luminosas artificiais visíveis luz ultravioleta
+    - W90 #Exposição outra tipos radiação não ionizante
+    - W91 #Exposição a tipo NE de radiação
+    - W93 #Exposição frio excessivo origem artificial
+    - X31 #Exposição a frio natural excessivo
+    - X32 #Exposição a luz solar
+relatorios:
+  - nome: Densidade Municipal por Estado
+    path: '/relatorios/queimaduras/densidade-municipal-por-municipio'
+    parametros: 
+      - estado
+      - data_inicio
+      - data_fim
+      - email
+  - nome: Casos Mensais por Município por Estado
+    path: '/relatorios/queimaduras/casos-mensais-por-municipio-por-estado'
+    parametros: 
+      - estado
+      - data_inicio
+      - data_fim
+      - email
