@@ -32,9 +32,11 @@ def preparar_e_enviar_relatorio_async(estado: str, data_inicio: str, data_fim: s
                 estado, _formatar_intervalo(data_inicio, data_fim))
 
     file_path = os.path.join(relatorios_folder, f'{estado}.{data_inicio}.{data_fim}.pdf')
-    working_path = os.path.join(relatorios_folder, id_requisicao)
+    working_path = os.path.join(relatorios_folder, id_requisicao, '')
 
     os.makedirs(working_path, exist_ok=True)
+
+    print(f'{estado} {data_inicio} {data_fim} {file_path} {working_path}')
 
     if not os.path.exists(file_path):
         p = Popen(['Rscript', 'rscripts/densidade_municipal_por_periodo.R', estado,

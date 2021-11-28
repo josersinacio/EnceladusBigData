@@ -11,6 +11,8 @@ params:
     uf: ""
 header-includes:
     - \usepackage{caption}
+editor_options:
+    chunk_output_type: console
 ---
 
 \captionsetup[table]{labelformat=empty}
@@ -22,7 +24,8 @@ _OBS: o relatório considera o municipio de residencia da vítima._
 ## Estratificação por tipo de queimadura
 
 ```{r, echo = FALSE}
-contagem_por_tipo <- read.csv(paste0(diretorio, contagem_por_tipo, sep = "/"))
+arquivo <- paste0(params$diretorio, params$contagem_por_tipo, sep = "")
+contagem_por_tipo <- read.csv(arquivo)
 yrange <- range(pretty(c(0, ceiling(max(contagem_por_tipo$quantidade) * 1.25))))
 
 barplot(
@@ -49,8 +52,10 @@ barplot(
 options(digits = 2)
 library(knitr)
 
+arquivo <- paste0(params$diretorio, params$municipios_com_casos, sep = "")
+
 kable(
-    paste0(diretorio, municipios_com_casos, sep = "/"),
+    read.csv(arquivo),
     col.names = c("Município", "População", "Casos", "por 100 mil hab."),
     format.args = list(decimal.mark = ",", big.mark = "."),
     row.names = TRUE
@@ -65,8 +70,10 @@ kable(
 options(digits = 2)
 library(knitr)
 
+arquivo <- paste0(params$diretorio, params$municipios_sem_casos, sep = "")
+
 kable(
-    paste0(diretorio, municipios_sem_casos, sep = "/"),
+    read.csv(arquivo),
     col.names = c("Município", "População"),
     format.args = list(decimal.mark = ",", big.mark = "."),
     row.names = TRUE

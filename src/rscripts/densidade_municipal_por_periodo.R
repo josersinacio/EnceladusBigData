@@ -18,7 +18,7 @@ diretorio_de_trabalho <- args[[5]]
 ano_inicio <- strftime(data_inicio, "%Y")
 ano_fim <- strftime(data_fim, "%Y")
 
-source("codigos_cid10")
+source("rscripts/codigos_cid10.R")
 
 dados <- fetch_datasus(
   year_start = ano_inicio,
@@ -38,7 +38,7 @@ filtrar_por_causas <- function(df, codigos) {
   return(big_data)
 }
 
-dados_filtrados <- filtrar_por_causas(dados, codigos)
+dados_filtrados <- filtrar_por_causas(dados, codigos_cid10)
 
 dados_processados <- process_sim(dados_filtrados) %>%
   janitor::clean_names()
@@ -119,20 +119,23 @@ municipios_com_casos <- municipios_com_casos[,
   c("mun_res_nome", "populacao", "n", "densidade")
 ]
 
+
+
 write.csv(
   municipios_com_casos,
-  paste0(diretorio_de_trabalho, "municipios_com_casos.csv", sep = "/")
+  paste0(diretorio_de_trabalho, "municipios_com_casos.csv", sep = ""),
+  row.names = FALSE
 )
 
 write.csv(
   municipios_sem_casos,
-  paste0(diretorio_de_trabalho, "municipios_sem_casos.csv", sep = "/"),
+  paste0(diretorio_de_trabalho, "municipios_sem_casos.csv", sep = ""),
   row.names = FALSE
 )
 
 write.csv(
   contagem_por_tipo,
-  paste0(diretorio_de_trabalho, "contagem_por_tipo.csv", sep = "/"),
+  paste0(diretorio_de_trabalho, "contagem_por_tipo.csv", sep = ""),
   row.names = FALSE
 )
 
