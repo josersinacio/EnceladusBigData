@@ -1,3 +1,4 @@
 **/venv
 /output
 /**/*:Zone.identifier
+**/__pycache__

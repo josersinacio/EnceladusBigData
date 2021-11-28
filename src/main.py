@@ -1,6 +1,7 @@
 from quart import Quart, request, jsonify, Response
 from quart_cors import cors
 from default_config import defaultConfig
+from relatorios import relatorios, densidade_municipal_por_periodo
 from pathlib import Path
 import logging.config
 import os.path
@@ -8,16 +9,13 @@ import asyncio
 import uuid
 import os
 
-app = Quart(__name__)
+app = Quart(__name__, static_url_path='', static_folder='public')
+
 app = cors(app, allow_origin="*")
 
-def fire_and_forget(f):
-    def wrapped(*args, **kwargs):
-        return asyncio.get_event_loop().run_in_executor(None, f, *args, *kwargs)
-
 @app.route('/')
-def home():
-    return "Hello World"
+async def root():
+    return await app.send_static_file('index.html')
 
 @app.route('/config/anos')
 def anos_disponiveis():
@@ -31,10 +29,44 @@ def estados_disponiveis():
 def codigos_cid10():
     return jsonify(defaultConfig.codigos_cid10())
 
-
 @app.route('/config/relatorios')
-def relatorios():
+def relatorios_disponiveis():
     return jsonify(defaultConfig.relatorios())
+
+
+# Relatórios
+
+@app.route('/relatorios/processados')
+def get_relatorios_processados():
+    return jsonify(relatorios.listar_relatorios_processados())
+
+
+## Densidade municipal por período
+
+@app.route('/relatorios/queimaduras/densidade-municipal-por-periodo/<path:path>')
+async def get_relatorio(path):
+    arquivo = densidade_municipal_por_periodo.ler_relatorio(path)
+
+    response = Response(arquivo)
+    response.headers.set('Content-Disposition',
+                         'attachment', filename=path)
+    response.headers.set('Content-Type', 'application/pdf')
+
+    return response
+
+
+@app.route('/relatorios/queimaduras/densidade-municipal-por-periodo', methods=['POST'])
+async def post_relatorio_queimaduras():
+
+    estados_param = request.args.get('estado')
+    data_inicio_param = request.args.get('data_inicio')
+    data_fim_param = request.args.get('data_fim')
+    email_param = request.args.get('email')
+
+    asyncio.get_event_loop().run_in_executor(None, queimaduras.preparar_e_enviar_relatorio_async,
+                                             estados_param, data_inicio_param, data_fim_param, email_param)
+
+    return dict(destino=email_param, id_requisicao=str(uuid.uuid1())), 202
 
 app_home = os.path.join(Path.home(), '.enceladus', 'logs')
 os.makedirs(app_home, exist_ok=True)

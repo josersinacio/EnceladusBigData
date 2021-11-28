@@ -14,7 +14,7 @@ class DefaultConfig:
     def codigos_cid10(self):
         return self.__config.get("codigosCid10")
     
-    def relatorios(self):
+    def relatorios(self) -> list:
       return self.__config.get("relatorios")
 
     def __read_yaml(self):
