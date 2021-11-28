@@ -1,7 +1,10 @@
 import os
 import logging
+import shutil
 from pathlib import Path
 from subprocess import Popen, PIPE, STDOUT
+
+from quart_cors import T
 from send_email import send_email
 
 logger = logging.getLogger(__name__)
@@ -23,19 +26,19 @@ def ler_relatorio(relatorio: str):
         return f.read()
 
 
-def preparar_e_enviar_relatorio_async(estado: str, data_inicio: str, data_fim: str, email: str):
+def preparar_e_enviar_relatorio_async(estado: str, data_inicio: str, data_fim: str, email: str, id_requisicao: str):
 
     logger.info(f'Obtendo registros de queimaduras para %s %s.',
                 estado, _formatar_intervalo(data_inicio, data_fim))
 
-
     file_path = os.path.join(relatorios_folder, f'{estado}.{data_inicio}.{data_fim}.pdf')
+    working_path = os.path.join(relatorios_folder, id_requisicao)
 
-    print(file_path)
+    os.makedirs(working_path, exist_ok=True)
 
     if not os.path.exists(file_path):
-        p = Popen(['Rscript', 'poc2/relatorio_queimaduras_sim.R', estado,
-                  data_inicio, data_fim, file_path], stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+        p = Popen(['Rscript', 'rscripts/densidade_municipal_por_periodo.R', estado,
+                  data_inicio, data_fim, file_path, working_path], stdout=PIPE, stdin=PIPE, stderr=STDOUT)
 
         streamdata = p.communicate()[0]
 
@@ -44,6 +47,8 @@ def preparar_e_enviar_relatorio_async(estado: str, data_inicio: str, data_fim: s
 
         if (p.returncode != 0):
             return
+    
+    shutil.rmtree(working_path, ignore_errors=True)
 
     logger.info('Preparando para envio do diagrama de %s em %s com destinatário a %s.', estado, [
                 data_inicio, data_fim], email)
