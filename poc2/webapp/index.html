@@ -68,8 +68,38 @@
     </table>
   </section>
 
+<div id="criadoPor" class="modalDialog">
+  <div>
+    <a href="#fecharPopup" title="Close" class="close">X</a>
+    <h2 class="Signika--700">Desenvolvido por:</h2>
+    <p>José Rodrigo Inácio | 
+      <a class="social--links" href="https://github.com/josersi" target="_blank">Github</a> - 
+      <a class="social--links" href="https://www.linkedin.com/in/josersinacio/" target="_blank">LinkedIn</a>
+    </p>
+    <p>Josué de Paulo Viana | 
+      <a class="social--links" href="https://github.com/josuepviana" target="_blank">Github</a> -
+      <a class="social--links" href="https://www.linkedin.com/in/josue-viana/" target="_blank">LinkedIn</a>
+    </p>
+  </div>
+</div>
+
+<div id="comoUsar" class="modalDialog">
+  <div>
+    <a href="#fecharPopup" title="Close" class="close">X</a>
+    <h2 class="Signika--700">Como usar:</h2>
+    <h3 class="Signika--500">Tipo de Relatório</h3>
+    <p>É onde você escolhe o tipo de relatório que quer visualizar.</p>
+    <h3 class="Signika--500">Opções de Dados</h3>
+    <p>Você pode escolher o <i><b>estado</b></i> e as <i><b>data de inicio</b></i> e <i><b>fim dos dados</b></i> que serão utilizados no relatório. 
+      Para que você receba o relatório, seu e-mail deve ter sido cadastrado previamente.
+      Se ainda não é cadastrado, favor entrar em contato com os desenvolvedores.</p>
+    <h3 class="Signika--500">Relatórios Processados</h3>
+    <p>A tabela exibe os relatórios processados anteriormente e os dados utilizados para gera-los.</p>
+  </div>
+</div>
+
   <footer class="Signika--500">
-    <div>Como usar | Criado por </div>
+    <div><a class="social--links" href="#comoUsar">Como usar</a> | <a class="social--links" href="#criadoPor">Criado por</a></div>
     <div>&copy; Copyright 2021, Enceladus Big Data</div>
   </footer>
 
@@ -80,7 +110,16 @@
       
       await atualizarTabela();
 
-      setInterval(atualizarTabela, 2000);            
+      setInterval(atualizarTabela, 2000);    
+      
+      for (const estado of getEstados()) {
+        const estadoOption = document.createElement("option");
+
+        estadoOption.value = estado.sigla;
+        estadoOption.innerText = estado.nome;
+
+        estadosSelect.appendChild(estadoOption);
+      }
     })
 
     async function atualizarTabela() {
@@ -101,19 +140,10 @@
           <td class="downloadProcessado Signika--300"><a href='${baseUrl + relatorio.uri}'> Baixar PDF </a></td> 
         </tr>`;
       });
-
-      for (const estado of getEstados()) {
-        const estadoOption = document.createElement("option");
-
-        estadoOption.value = estado.sigla;
-        estadoOption.innerText = estado.nome;
-
-        estadosSelect.appendChild(estadoOption);
-      }
     }
 
     async function processar() {
-      const enviarForm = new URL(`${baseUrl}/relatorios/queimaduras/densidade-municipal-poar-periodo`);
+      const enviarForm = new URL(`${baseUrl}/relatorios/queimaduras/densidade-municipal-por-periodo`);
 
       enviarForm.searchParams.append("estado", estadosSelect.value);
       enviarForm.searchParams.append("data_inicio", dataInicialInput.value);
