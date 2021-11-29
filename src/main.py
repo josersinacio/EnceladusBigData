@@ -1,7 +1,7 @@
 from quart import Quart, request, jsonify, Response
 from quart_cors import cors
 from default_config import defaultConfig
-from relatorios import relatorios, densidade_municipal_por_periodo
+from relatorios import relatorios, densidade_municipal_por_periodo, casos_mensais_por_municipio_por_estado
 from pathlib import Path
 import logging.config
 import os.path
@@ -69,6 +69,34 @@ async def post_relatorio_queimaduras():
                                              estados_param, data_inicio_param, data_fim_param, email_param, id_req)
 
     return dict(destino=email_param, id_requisicao=id_req), 202
+
+
+## Casos Mensais por Município por Estado
+
+@app.route('/relatorios/queimaduras/casos-mensais-por-municipio-por-estado/<path:path>')
+async def get_relatorio_2(path):
+    arquivo = casos_mensais_por_municipio_por_estado.ler_relatorio(path)
+
+    response = Response(arquivo)
+    response.headers.set('Content-Disposition',
+                         'attachment', filename=path)
+    response.headers.set('Content-Type', 'application/pdf')
+
+    return response
+
+
+@app.route('/relatorios/queimaduras/casos-mensais-por-municipio-por-estado', methods=['POST'])
+async def post_relatorio_queimaduras_2():
+
+    estados_param = request.args.getlist('estado')
+    ano_inicio_param = request.args.get('ano_inicio')
+    ano_fim_param = request.args.get('ano_fim')
+    email_param = request.args.get('email')
+
+    asyncio.get_event_loop().run_in_executor(None, casos_mensais_por_municipio_por_estado.preparar_e_enviar_diagrama_async,
+                                             estados_param, ano_inicio_param, ano_fim_param, email_param)
+
+    return dict(destino=email_param, id_requisicao=str(uuid.uuid1())), 202
 
 app_home = os.path.join(Path.home(), '.enceladus', 'logs')
 os.makedirs(app_home, exist_ok=True)

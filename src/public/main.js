@@ -97,6 +97,11 @@ async function processar() {
 }
 
 function formatarDate(dateString) {
+
+  if (dateString.length === 4) {
+    return dateString;
+  }
+
   const date = new Date(dateString);
 
   // Corrige timezone [https://stackoverflow.com/a/16048201]
