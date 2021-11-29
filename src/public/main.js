@@ -28,7 +28,7 @@ async function listarRelatoriosDisponiveis() {
       document.createElement("option"),
       {
         innerText: relatorio.nome,
-        value: relatorio.path
+        value: relatorio.id
       }
     );
 
