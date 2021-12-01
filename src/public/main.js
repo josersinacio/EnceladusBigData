@@ -57,7 +57,7 @@ async function atualizarTabela() {
 
   if (relatorios.length === 0) {
     linhasProcessadas.innerHTML = `
-      <tr><td colspan="4"><strong>Nenhum relatório processado ainda!</strong></td></tr>
+      <tr><td colspan="6"><strong>Nenhum relatório processado ainda!</strong></td></tr>
     `
   }
 
@@ -72,14 +72,18 @@ async function atualizarTabela() {
           <td class="estadoProcessado Signika--300">${relatorio.estado}</td>
           <td class="dataInicioProcessado Signika--300">${dataInicial}</td>
           <td class="dataFimProcessado Signika--300">${dataFinal}</td>
+          <td class="dataFimProcessado Signika--300">${relatorio.data_processamento || '-'}</td>
           <td class="downloadProcessado Signika--300"><a href='${relatorio.uri}' target="_blank">💾 Baixar PDF</a></td>
         </tr>`;
   });
 }
 
-async function processar() {
+async function processar(event) {
+
+  event.preventDefault()
 
   try {
+    console.log('x')
     const responseBody = await api.postRelatorio(config.tipoRelatorio.path, {
       estado: estadosSelect.value,
       dataInicial: dataInicialInput.value,

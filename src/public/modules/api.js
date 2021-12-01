@@ -36,7 +36,7 @@ export class Api {
     enviarForm.searchParams.append("data_inicio", dataInicial);
     enviarForm.searchParams.append("data_fim", dataFinal);
     enviarForm.searchParams.append("email", email);
-
+    
     const response = await fetch(enviarForm.href, { method: 'POST' });
 
     return response.json();

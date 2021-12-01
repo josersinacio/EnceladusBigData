@@ -1,6 +1,7 @@
+import os
 import glob
 import logging
-import os
+import storage
 from pathlib import Path
 from default_config import defaultConfig
 
@@ -13,19 +14,26 @@ home_folder = os.path.join(Path.home(), '.enceladus')
 def listar_relatorios_processados():
 
     relatorios = []
+    datas_processamento = storage.datas_processamento()
 
     for diretorio in defaultConfig.relatorios():
         path = os.path.join(home_folder, diretorio.get('path')[1:], '*.pdf')
 
         for file in glob.glob(path):
-            nome_base = os.path.basename(file).split('.')
+            nome_base = os.path.basename(file)
+            partes_nome = nome_base.split('.')
+            chave_redis = f"dataProcessamento.{diretorio.get('id')}.{nome_base}"
+
+            print(f'chave={chave_redis}')
 
             relatorios.append(dict(
                 tipo=diretorio.get('nome'),
-                estado=nome_base[0],
-                data_inicio=nome_base[1],
-                data_fim=nome_base[2],
-                uri=f"{diretorio.get('path')}/{'.'.join(nome_base)}",
+                estado=partes_nome[0],
+                data_inicio=partes_nome[1],
+                data_fim=partes_nome[2],
+                uri=f"{diretorio.get('path')}/{nome_base}",
+                data_processamento=datas_processamento.get(
+                    f"dataProcessamento.{diretorio.get('id')}.{nome_base}")
             ))
 
     return relatorios

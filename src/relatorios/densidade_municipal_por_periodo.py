@@ -1,16 +1,17 @@
 import os
 import logging
 import shutil
+import storage
 from pathlib import Path
 from subprocess import Popen, PIPE, STDOUT
-
-from quart_cors import T
 from send_email import send_email
 
 logger = logging.getLogger(__name__)
 
 relatorios_folder = os.path.join(
     Path.home(), '.enceladus', 'relatorios', 'queimaduras', 'densidade-municipal-por-periodo')
+
+id_relatorio = 'DENSIDADE_MUNICIPAL_POR_PERIODO'
 
 os.makedirs(relatorios_folder, exist_ok=True)
 
@@ -47,6 +48,9 @@ def preparar_e_enviar_relatorio_async(estado: str, data_inicio: str, data_fim: s
 
         if (p.returncode != 0):
             return
+        
+        storage.salvar_data_processamento(id_relatorio, os.path.basename(file_path))
+
     
     shutil.rmtree(working_path, ignore_errors=True)
 
