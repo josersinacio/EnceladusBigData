@@ -87,9 +87,21 @@ codigosCid10:
     - X31 #Exposição a frio natural excessivo
     - X32 #Exposição a luz solar
 relatorios:
+  - id: DENSIDADE_MUNICIPAL_POR_PERIODO_GERAL
+    nome: Densidade Municipal por Período (Geral)
+    path: '/relatorios/queimaduras/densidade-municipal-por-periodo-geral'
+    multiplos_estados: true
+    campos_data: ['MM', 'yyyy']
+    parametros: 
+      - estado
+      - data_inicio
+      - data_fim
+      - email
   - id: DENSIDADE_MUNICIPAL_POR_PERIODO
     nome: Densidade Municipal por Período
     path: '/relatorios/queimaduras/densidade-municipal-por-periodo'
+    multiplos_estados: false
+    campos_data: ['dd', 'MM', 'yyyy']
     parametros: 
       - estado
       - data_inicio
@@ -98,8 +110,10 @@ relatorios:
   - id: CASOS_MENSAIS_POR_MUNICIPIO_POR_ESTADO
     nome: Casos Mensais por Município por Estado
     path: '/relatorios/queimaduras/casos-mensais-por-municipio-por-estado'
+    multiplos_estados: true
+    campos_data: ['dd', 'MM', 'yyyy']
     parametros: 
-      - estados
+      - estado
       - ano_inicio
       - ano_fim
       - email

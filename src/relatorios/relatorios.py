@@ -24,16 +24,13 @@ def listar_relatorios_processados():
             partes_nome = nome_base.split('.')
             chave_redis = f"dataProcessamento.{diretorio.get('id')}.{nome_base}"
 
-            print(f'chave={chave_redis}')
-
             relatorios.append(dict(
                 tipo=diretorio.get('nome'),
                 estado=partes_nome[0],
                 data_inicio=partes_nome[1],
                 data_fim=partes_nome[2],
                 uri=f"{diretorio.get('path')}/{nome_base}",
-                data_processamento=datas_processamento.get(
-                    f"dataProcessamento.{diretorio.get('id')}.{nome_base}")
+                data_processamento=datas_processamento.get(chave_redis)
             ))
 
     return relatorios

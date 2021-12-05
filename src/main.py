@@ -1,7 +1,7 @@
 from quart import Quart, request, jsonify, Response
 from quart_cors import cors
 from default_config import defaultConfig
-from relatorios import relatorios, densidade_municipal_por_periodo, casos_mensais_por_municipio_por_estado
+from relatorios import relatorios, densidade_municipal_por_periodo_geral, densidade_municipal_por_periodo, casos_mensais_por_municipio_por_estado
 from pathlib import Path
 import logging.config
 import os.path
@@ -39,6 +39,36 @@ def relatorios_disponiveis():
 @app.route('/relatorios/processados')
 def get_relatorios_processados():
     return jsonify(relatorios.listar_relatorios_processados())
+
+## Densidade municipal por período geral
+
+
+@app.route('/relatorios/queimaduras/densidade-municipal-por-periodo-geral/<path:path>')
+async def get_relatorio_geral(path):
+    arquivo = densidade_municipal_por_periodo_geral.ler_relatorio(path)
+
+    response = Response(arquivo)
+    response.headers.set('Content-Disposition',
+                         'attachment', filename=path)
+    response.headers.set('Content-Type', 'application/pdf')
+
+    return response
+
+
+@app.route('/relatorios/queimaduras/densidade-municipal-por-periodo-geral', methods=['POST'])
+async def post_relatorio_queimaduras_geral():
+
+    estados_param = request.args.getlist('estado')
+    data_inicio_param = request.args.get('data_inicio')
+    data_fim_param = request.args.get('data_fim')
+    email_param = request.args.get('email')
+
+    id_req = str(uuid.uuid1())
+
+    asyncio.get_event_loop().run_in_executor(None, densidade_municipal_por_periodo_geral.preparar_e_enviar_relatorio_async,
+                                             estados_param, data_inicio_param, data_fim_param, email_param, id_req)
+
+    return dict(destino=email_param, id_requisicao=id_req), 202
 
 
 ## Densidade municipal por período

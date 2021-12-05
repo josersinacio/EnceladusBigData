@@ -14,7 +14,4 @@ def datas_processamento() -> dict:
   
   keys = redis_client.keys('dataProcessamento.*')
 
-  print(keys)
-  print(redis_client.keys('*'))
-
   return {key: redis_client.get(key) for key in keys}

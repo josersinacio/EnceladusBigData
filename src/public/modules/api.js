@@ -29,10 +29,10 @@ export class Api {
     return estados;
   }
 
-  async postRelatorio(relatorioPath, { estado, dataInicial, dataFinal, email }) {
+  async postRelatorio(relatorioPath, { estado, estados, dataInicial, dataFinal, email }) {
     const enviarForm = new URL(relatorioPath, location.origin);
 
-    enviarForm.searchParams.append("estado", estado);
+    estados.forEach(estado => enviarForm.searchParams.append("estado", estado));
     enviarForm.searchParams.append("data_inicio", dataInicial);
     enviarForm.searchParams.append("data_fim", dataFinal);
     enviarForm.searchParams.append("email", email);

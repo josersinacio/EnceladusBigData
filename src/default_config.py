@@ -5,10 +5,10 @@ class DefaultConfig:
     def __init__(self):
         self.__config = self.__read_yaml()  
 
-    def anos_disponiveis(self):
+    def anos_disponiveis(self) -> list:
         return self.__config.get("anos")
 
-    def estados_disponiveis(self):
+    def estados_disponiveis(self) -> list:
         return self.__config.get("estados")
 
     def codigos_cid10(self):

@@ -21,7 +21,7 @@ async function main() {
 async function listarRelatoriosDisponiveis() {
   const relatorios = await api.getRelatoriosDisponiveis();
 
-  config.tipoRelatorio = relatorios[0];
+  config.tipoRelatorio = relatorios[0];s
 
   relatorios.forEach(relatorio => {
     const relatorioOption = Object.assign(
@@ -37,7 +37,13 @@ async function listarRelatoriosDisponiveis() {
 }
 
 async function listarEstados() {
-  for (const estado of await api.getEstados()) {
+  const estados = await api.getEstados();
+
+  if (config.tipoRelatorio.multiplos_estados) {
+    estados.unshift({sigla: "TODOS", nome: "Todos"});
+  }
+
+  for (const estado of estados) {
     const estadoOption = Object.assign(
       document.createElement("option"),
       {
@@ -48,6 +54,8 @@ async function listarEstados() {
 
     estadosSelect.appendChild(estadoOption);
   }
+
+  estadosSelect.multiple = config.tipoRelatorio.multiplos_estados
 }
 
 async function atualizarTabela() {
@@ -83,9 +91,8 @@ async function processar(event) {
   event.preventDefault()
 
   try {
-    console.log('x')
     const responseBody = await api.postRelatorio(config.tipoRelatorio.path, {
-      estado: estadosSelect.value,
+      estados: [...estadosSelect.options].filter(o => o.selected).map(o => o.value),
       dataInicial: dataInicialInput.value,
       dataFinal: dataFinalInput.value,
       email: emailInput.value
