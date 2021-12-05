@@ -1,9 +1,11 @@
 import { Api } from "./modules/api.js";
+import { criarElementEstado, selecionarTodosEstados, configurarEstadosSelecaoUnica, configurarEstadosSelecaoMultipla, selecionarEstado } from "./modules/dom.js";
 
 const api = new Api();
 
 const config = {
-  tipoRelatorio: null
+  tipoRelatorioAtual: null,
+  tiposRelatorio: []
 };
 
 async function main() {
@@ -16,12 +18,16 @@ async function main() {
   setInterval(atualizarTabela, 10_000);
 
   novoPedidoForm.addEventListener('submit', processar);
+  todosEstadosCheckbox.addEventListener('change', selecionarTodosEstados);
+  document.getElementsByName('estado').forEach(ec => ec.addEventListener('change', selecionarEstado));
+  tipoRelatorio.addEventListener('change', onTipoRelatorioChange);
 }
 
 async function listarRelatoriosDisponiveis() {
   const relatorios = await api.getRelatoriosDisponiveis();
 
-  config.tipoRelatorio = relatorios[0];s
+  config.tipoRelatorioAtual = relatorios[0];
+  config.tiposRelatorio = relatorios;
 
   relatorios.forEach(relatorio => {
     const relatorioOption = Object.assign(
@@ -39,23 +45,19 @@ async function listarRelatoriosDisponiveis() {
 async function listarEstados() {
   const estados = await api.getEstados();
 
-  if (config.tipoRelatorio.multiplos_estados) {
-    estados.unshift({sigla: "TODOS", nome: "Todos"});
+  if (config.tipoRelatorioAtual.multiplos_estados) {
+    configurarEstadosSelecaoMultipla()
+  } else {
+    configurarEstadosSelecaoUnica()
   }
 
   for (const estado of estados) {
-    const estadoOption = Object.assign(
-      document.createElement("option"),
-      {
-        innerText: estado.nome,
-        value: estado.sigla
-      }
-    )
+    const elemento = criarElementEstado(estado);
 
-    estadosSelect.appendChild(estadoOption);
+    estadosFieldset.appendChild(elemento);
   }
 
-  estadosSelect.multiple = config.tipoRelatorio.multiplos_estados
+//  estadosSelect.multiple = config.tipoRelatorio.multiplos_estados
 }
 
 async function atualizarTabela() {
@@ -91,8 +93,12 @@ async function processar(event) {
   event.preventDefault()
 
   try {
-    const responseBody = await api.postRelatorio(config.tipoRelatorio.path, {
-      estados: [...estadosSelect.options].filter(o => o.selected).map(o => o.value),
+    const estados = [... document.getElementsByName('estado')]
+      .filter(e => e.checked)
+      .map(e => e.value);
+
+    const responseBody = await api.postRelatorio(config.tipoRelatorioAtual.path, {
+      estados: estados,
       dataInicial: dataInicialInput.value,
       dataFinal: dataFinalInput.value,
       email: emailInput.value
@@ -105,6 +111,16 @@ async function processar(event) {
   }
 
   return false;
+}
+
+function onTipoRelatorioChange(event) {
+  config.tipoRelatorioAtual = config.tiposRelatorio.find(tp => tp.id === event.target.value);
+
+  if (config.tipoRelatorioAtual.multiplos_estados) {
+    configurarEstadosSelecaoMultipla()
+  } else {
+    configurarEstadosSelecaoUnica()
+  }
 }
 
 function formatarDate(dateString) {

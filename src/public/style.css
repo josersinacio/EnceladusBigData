@@ -60,9 +60,12 @@ a:active {
     bottom: 1em;
 }
 .novoPedido--section{
-    padding: 1em;
-    background-color: whitesmoke;
-    text-align: center;
+  padding: 1em;
+  background-color: whitesmoke;
+   text-align: center;
+  border-bottom-left-radius: 50% 40%;
+  border-bottom-right-radius: 50% 40%;
+  padding-bottom: 2.5em;
 }
 
 .novoPedido--label{
@@ -152,3 +155,10 @@ a:active {
   .close:hover {
     background: darkgray;
   }
+
+#estadosFieldset {
+  padding: 1em;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: left;
+}

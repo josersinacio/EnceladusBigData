@@ -10,7 +10,7 @@ from send_email import send_email
 logger = logging.getLogger(__name__)
 
 relatorios_folder = os.path.join(
-    Path.home(), '.enceladus', 'relatorios', 'queimaduras', 'densidade-municipal-por-periodo')
+    Path.home(), '.enceladus', 'relatorios', 'queimaduras', 'densidade-municipal-por-periodo-geral')
 
 id_relatorio = 'DENSIDADE_MUNICIPAL_POR_PERIODO'
 
