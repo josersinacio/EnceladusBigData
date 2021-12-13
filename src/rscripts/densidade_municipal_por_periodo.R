@@ -90,7 +90,6 @@ municipios_com_casos$densidade <- NA
 
 municipios_com_casos <- as.data.frame(municipios_com_casos)
 
-
 for (i in rownames(municipios_com_casos)) {
   codigo_municipio <- municipios_com_casos[[i, "codmunres"]]
 
@@ -113,12 +112,16 @@ municipios_sem_casos <- municipios_sem_casos[
   c("city", "estimated_population")
 ]
 
-rownames(municipios_sem_casos) <- seq.int(nrow(municipios_sem_casos))
+
+nrows_mun_sem_casos <- nrow(municipios_sem_casos)
+
+if (nrows_mun_sem_casos > 0) {
+  rownames(municipios_sem_casos) <- seq.int(nrows_mun_sem_casos)
+}
 
 municipios_com_casos <- municipios_com_casos[,
   c("mun_res_nome", "populacao", "n", "densidade")
 ]
-
 
 
 write.csv(

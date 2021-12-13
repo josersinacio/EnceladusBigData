@@ -1,5 +1,5 @@
 import { Api } from "./modules/api.js";
-import { criarElementEstado, selecionarTodosEstados, configurarEstadosSelecaoUnica, configurarEstadosSelecaoMultipla, selecionarEstado } from "./modules/dom.js";
+import { criarElementEstado, selecionarTodosEstados, configurarEstadosSelecaoUnica, configurarEstadosSelecaoMultipla, selecionarEstado, setUpDates } from "./modules/dom.js";
 
 const api = new Api();
 
@@ -21,6 +21,8 @@ async function main() {
   todosEstadosCheckbox.addEventListener('change', selecionarTodosEstados);
   document.getElementsByName('estado').forEach(ec => ec.addEventListener('change', selecionarEstado));
   tipoRelatorio.addEventListener('change', onTipoRelatorioChange);
+
+  setUpDates();
 }
 
 async function listarRelatoriosDisponiveis() {
@@ -57,7 +59,7 @@ async function listarEstados() {
     estadosFieldset.appendChild(elemento);
   }
 
-//  estadosSelect.multiple = config.tipoRelatorio.multiplos_estados
+  //  estadosSelect.multiple = config.tipoRelatorio.multiplos_estados
 }
 
 async function atualizarTabela() {
@@ -93,7 +95,7 @@ async function processar(event) {
   event.preventDefault()
 
   try {
-    const estados = [... document.getElementsByName('estado')]
+    const estados = [...document.getElementsByName('estado')]
       .filter(e => e.checked)
       .map(e => e.value);
 

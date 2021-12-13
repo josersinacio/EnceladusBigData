@@ -69,3 +69,15 @@ export function configurarEstadosSelecaoMultipla() {
     }
   })
 }
+
+export function setUpDates() {
+  flatpickr('.datePicker', {
+    mode: 'range',
+    dateFormat: 'd/m/Y',
+    minDate: '01/01/2013',
+    maxDate: '31/12/2019',
+    defaultDate: ['01/03/2018', "31/02/2019"],
+    locale: 'pt',
+    conjunction: 'à'
+  });
+}

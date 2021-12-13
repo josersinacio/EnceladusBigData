@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Signika:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="reset.css">
   <link rel="stylesheet" href="style.css">
   <title>Enceladus Big Data</title>
@@ -39,15 +40,9 @@
       </fieldset>
 
       <label class="novoPedido--label Signika--300">
-        Data inicial
+        Data inicial e Final
 
-        <input id="dataInicialInput" type="date" min="2013-01-01" max="2019-12-31" required>
-      </label>
-
-      <label class="novoPedido--label Signika--300">
-        Data final
-
-        <input id="dataFinalInput" type="date" min="2013-01-01" max="2019-12-31" required>
+        <input id="dataInicialInput" class="datePicker" type="date" min="2013-01-01" max="2019-12-31" required>
       </label>
 
       <label class="novoPedido--label Signika--300">
@@ -120,6 +115,8 @@
 
 </footer>
 
+<script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
 <script type="module" src="main.js"></script>
 
 </script>
