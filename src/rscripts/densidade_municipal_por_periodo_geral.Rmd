@@ -1,5 +1,5 @@
 ---
-title: "Relatório de Queimaduras"
+title: "Relatório de Mortalidade por Queimadura - Comparativo"
 output: pdf_document
 params: 
     desvio_padrao_por_estado: "desvio_padrao_por_estado.csv"
@@ -18,14 +18,12 @@ encoding: UTF-8
 
 \captionsetup[table]{labelformat=empty}
 
-Mortalidade por queimadura entre `r format(params$dt_inicio, '%d/%m/%Y')` e `r format(params$dt_fim, '%d/%m/%Y')` no estado `r params$uf`.
+Comparativo de mortalidade por queimadura entre `r format(params$dt_inicio, '%d/%m/%Y')` e `r format(params$dt_fim, '%d/%m/%Y')` nos estados `r params$uf`.
 
 _OBS: o relatório considera o municipio de residencia da vítima._
 
 
-## Densidade municipal no período
-
-### Municípios com casos registrados
+## Desvio padrão de casos entre `r format(params$dt_inicio, '%d/%m/%Y')` e `r format(params$dt_fim, '%d/%m/%Y')`.
 
 ```{r, echo = FALSE, message=FALSE}
 options(digits = 2)
@@ -47,9 +45,7 @@ kable(
 
 \pagebreak
 
-## Densidade municipal no período
-
-### Municípios com casos registrados
+## Densidade de casos por municipios mais relevantes no período
 
 ```{r, echo = FALSE, message=FALSE, results="asis"}
 options(digits = 2)
