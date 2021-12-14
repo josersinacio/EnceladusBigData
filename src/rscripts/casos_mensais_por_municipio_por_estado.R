@@ -5,7 +5,6 @@ library(stringr)
 library(gridExtra)
 library(grid)
 library(lubridate)
-library(plyr)
 
 args <- commandArgs(TRUE)
 
@@ -13,6 +12,7 @@ estados <- strsplit(args[[1]], ",")
 ano_inicio <- args[[2]]
 ano_fim <- args[[3]]
 nome_arquivo <- args[[4]]
+diretorio_de_trabalho <- args[[5]]
 
 source("rscripts/codigos_cid10.R")
 
@@ -20,7 +20,7 @@ regex <- stri_paste(codigos_cid10, collapse = "|")
 
 datalist <- list()
 
-for (i in 1:length(estados)) {
+for (i in seq_len(length(estados))) {
   dados <- fetch_datasus(
     year_start = ano_inicio,
     year_end = ano_fim,
@@ -45,13 +45,11 @@ dados_processados <- process_sim(big_data)
 
 ocorrencias <- as.data.frame(t(table(dados_processados$LOCOCOR)))
 
-colors <- rainbow(length(ocorrencias$Freq))
-
-pdf(nome_arquivo, paper = "a4r", width = 9, height = 11.7)
-
-pie(ocorrencias$Freq, labels = ocorrencias$Freq, col = colors)
-
-legend("topleft", legend = ocorrencias$Var2, fill = colors)
+diagrama_ocorrencias <- data.frame(
+  local = ocorrencias$Var2,
+  ocorrencias = ocorrencias$Freq,
+  colors = rainbow(length(ocorrencias$Freq))
+)
 
 ## TABELA DE CASOS POR CIDADE/MUNICIPIO
 
@@ -99,14 +97,32 @@ for (i in seq_len(nrow(dados_finais))) {
 # Cria header com o nome das colunas
 dados_finais <- dados_finais[, c("Municipio", meses, "Total")]
 
+write.csv(
+  diagrama_ocorrencias,
+  paste0(
+    diretorio_de_trabalho,
+    "diagrama_ocorrencias.csv",
+    sep = ""
+  ),
+  row.names = FALSE
+)
 
-# Divide as paginas a cada 22 registros
-conjuntos <- split(dados_finais, seq(nrow(dados_finais)) %/% 24)
+write.csv(
+  dados_finais,
+  paste0(
+    diretorio_de_trabalho,
+    "casos_mensais_por_municipio_no_estado.csv",
+    sep = ""
+  ),
+  row.names = FALSE
+)
 
-for (conjunto in conjuntos) {
-  row.names(conjunto) <- NULL
-  grid.newpage() # Cria uma nova página
-  grid.table(conjunto)
-}
-
-dev.off()
+rmarkdown::render("rscripts/casos_mensais_por_municipio_por_estado.Rmd",
+  output_file = nome_arquivo,
+  params = list(
+    diretorio = diretorio_de_trabalho,
+    ano_fim = ano_fim,
+    ano_inicio = ano_inicio,
+    uf = args[[1]]
+  )
+)

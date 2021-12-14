@@ -2,12 +2,11 @@
 title: "Relatório de Mortalidade por Queimadura - Mensal por Estado"
 output: pdf_document
 params: 
-    municipios_com_casos: "municipios_com_casos.csv"
-    municipios_sem_casos: "municipios_sem_casos.csv"
-    contagem_por_tipo: "contagem_por_tipo.csv"
+    diagrama_ocorrencias: "diagrama_ocorrencias.csv"
+    casos_mensais_por_municipio_no_estado: "casos_mensais_por_municipio_no_estado.csv"
     diretorio: ""
-    dt_inicio: ""
-    dt_fim: ""
+    ano_fim: ""
+    ano_inicio: ""
     uf: ""
 header-includes:
     - \usepackage{caption}
@@ -17,9 +16,46 @@ editor_options:
 
 \captionsetup[table]{labelformat=empty}
 
-Mortalidade por queimadura entre `r format(params$dt_inicio, '%d/%m/%Y')` e `r format(params$dt_fim, '%d/%m/%Y')` no estado `r params$uf`.
+Mortalidade por queimadura entre `r params$ano_inicio` e `r params$ano_fim` no estado `r params$uf`.
 
 _OBS: o relatório considera o municipio de residencia da vítima._
+
+```{r, echo = FALSE, message=FALSE}
+
+diagrama_ocorrencias <- read.csv(
+    paste0(params$diretorio, params$diagrama_ocorrencias, sep = "")
+)
+
+pie(
+    diagrama_ocorrencias$ocorrencias,
+    labels = paste0(
+        diagrama_ocorrencias$ocorrencias,
+        " - ",
+        diagrama_ocorrencias$local,
+    ),
+    col = diagrama_ocorrencias$colors
+)
+```
+
+\pagebreak
+
+```{r, echo = FALSE, message=FALSE}
+options(digits = 2)
+library(knitr)
+
+arquivo <- paste0(
+    params$diretorio,
+    params$casos_mensais_por_municipio_no_estado,
+    sep = ""
+)
+
+kable(
+    read.csv(arquivo),
+    # col.names = c("Município", "População"),
+    format.args = list(decimal.mark = ",", big.mark = "."),
+    row.names = TRUE
+)
+```
 
 \pagebreak
 

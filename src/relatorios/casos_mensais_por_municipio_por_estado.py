@@ -27,16 +27,19 @@ def ler_relatorio(relatorio: str):
     with open(os.path.join(relatorios_folder, relatorio), 'rb') as f:
         return f.read()
 
-def preparar_e_enviar_diagrama_async(estados: str, ano_inicio: int, ano_fim: int, email: str):
+def preparar_e_enviar_diagrama_async(estados: str, ano_inicio: int, ano_fim: int, email: str, id_requisicao: str):
 
     logger.info(f'Obtendo registros de queimaduras para %s %s.',
                 estados, _formatar_intervalo(ano_inicio, ano_fim))
 
     file_path = os.path.join(relatorios_folder, f'{"-".join(estados)}.{ano_inicio}.{ano_fim}.pdf')
+    working_path = os.path.join(relatorios_folder, id_requisicao, '')
+
+    os.makedirs(working_path, exist_ok=True)
 
     if not os.path.exists(file_path):
         p = Popen(['Rscript', 'rscripts/casos_mensais_por_municipio_por_estado.R', ','.join(estados),
-                ano_inicio, ano_fim, file_path], stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+                   ano_inicio, ano_fim, file_path, working_path], stdout=PIPE, stdin=PIPE, stderr=STDOUT)
 
         streamdata = p.communicate()[0]
 
