@@ -29,12 +29,21 @@ export class Api {
     return estados;
   }
 
-  async postRelatorio(relatorioPath, { estado, estados, dataInicial, dataFinal, email }) {
-    const enviarForm = new URL(relatorioPath, location.origin);
+  async postRelatorio(tipoRelatorio, { estados, dataInicial, dataFinal, email }) {
+    const enviarForm = new URL(tipoRelatorio.path, location.origin);
+
+    const apenasAno = tipoRelatorio.id === 'CASOS_MENSAIS_POR_MUNICIPIO_POR_ESTADO'
 
     estados.forEach(estado => enviarForm.searchParams.append("estado", estado));
-    enviarForm.searchParams.append("data_inicio", dataInicial);
-    enviarForm.searchParams.append("data_fim", dataFinal);
+
+    if (apenasAno) {
+      enviarForm.searchParams.append("ano_inicio", /^\d{4}/i.exec(dataInicial)[0]);
+      enviarForm.searchParams.append("ano_fim", /^\d{4}/i.exec(dataFinal)[0]);
+    } else {
+      enviarForm.searchParams.append("data_inicio", dataInicial);
+      enviarForm.searchParams.append("data_fim", dataFinal);
+    }
+
     enviarForm.searchParams.append("email", email);
     
     const response = await fetch(enviarForm.href, { method: 'POST' });

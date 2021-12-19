@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 relatorios_folder = os.path.join(
     Path.home(), '.enceladus', 'relatorios', 'queimaduras', 'densidade-municipal-por-periodo-geral')
 
-id_relatorio = 'DENSIDADE_MUNICIPAL_POR_PERIODO'
+id_relatorio = 'DENSIDADE_MUNICIPAL_POR_PERIODO_GERAL'
 
 os.makedirs(relatorios_folder, exist_ok=True)
 

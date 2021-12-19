@@ -27,12 +27,13 @@ def ler_relatorio(relatorio: str):
     with open(os.path.join(relatorios_folder, relatorio), 'rb') as f:
         return f.read()
 
-def preparar_e_enviar_diagrama_async(estados: str, ano_inicio: int, ano_fim: int, email: str, id_requisicao: str):
+def preparar_e_enviar_diagrama_async(estados: str, ano_inicio: str, ano_fim: str, email: str, id_requisicao: str):
 
     logger.info(f'Obtendo registros de queimaduras para %s %s.',
                 estados, _formatar_intervalo(ano_inicio, ano_fim))
 
-    file_path = os.path.join(relatorios_folder, f'{"-".join(estados)}.{ano_inicio}.{ano_fim}.pdf')
+    file_path = os.path.join(
+        relatorios_folder, f'{"-".join(estados)}.{ano_inicio}.{ano_fim}.pdf')
     working_path = os.path.join(relatorios_folder, id_requisicao, '')
 
     os.makedirs(working_path, exist_ok=True)

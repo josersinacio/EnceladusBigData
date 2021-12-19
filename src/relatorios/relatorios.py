@@ -18,7 +18,7 @@ def listar_relatorios_processados():
 
     for diretorio in defaultConfig.relatorios():
         path = os.path.join(home_folder, diretorio.get('path')[1:], '*.pdf')
-
+        
         for file in glob.glob(path):
             nome_base = os.path.basename(file)
             partes_nome = nome_base.split('.')

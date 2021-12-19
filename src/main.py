@@ -123,10 +123,12 @@ async def post_relatorio_queimaduras_2():
     ano_fim_param = request.args.get('ano_fim')
     email_param = request.args.get('email')
 
-    asyncio.get_event_loop().run_in_executor(None, casos_mensais_por_municipio_por_estado.preparar_e_enviar_diagrama_async,
-                                             estados_param, ano_inicio_param, ano_fim_param, email_param)
+    id_req = str(uuid.uuid1())
 
-    return dict(destino=email_param, id_requisicao=str(uuid.uuid1())), 202
+    asyncio.get_event_loop().run_in_executor(None, casos_mensais_por_municipio_por_estado.preparar_e_enviar_diagrama_async,
+                                             estados_param, ano_inicio_param, ano_fim_param, email_param, id_req)
+
+    return dict(destino=email_param, id_requisicao=id_req), 202
 
 app_home = os.path.join(Path.home(), '.enceladus', 'logs')
 os.makedirs(app_home, exist_ok=True)

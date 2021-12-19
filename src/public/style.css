@@ -72,9 +72,9 @@ a:active {
     padding: 0.5em;
 }
 
-.relatoriosProcessados--section{
-    text-align: center;
-    
+.relatoriosProcessados--section {
+  padding-bottom: 100px;
+  text-align: center;  
 }
 
 .relatoriosProcessados--table{

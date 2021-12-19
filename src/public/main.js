@@ -56,8 +56,6 @@ async function listarEstados() {
 
     estadosFieldset.appendChild(elemento);
   }
-
-//  estadosSelect.multiple = config.tipoRelatorio.multiplos_estados
 }
 
 async function atualizarTabela() {
@@ -97,7 +95,7 @@ async function processar(event) {
       .filter(e => e.checked)
       .map(e => e.value);
 
-    const responseBody = await api.postRelatorio(config.tipoRelatorioAtual.path, {
+    const responseBody = await api.postRelatorio(config.tipoRelatorioAtual, {
       estados: estados,
       dataInicial: dataInicialInput.value,
       dataFinal: dataFinalInput.value,

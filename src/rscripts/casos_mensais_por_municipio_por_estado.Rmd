@@ -32,6 +32,7 @@ pie(
         diagrama_ocorrencias$ocorrencias,
         " - ",
         diagrama_ocorrencias$local,
+        sep = ""
     ),
     col = diagrama_ocorrencias$colors
 )
