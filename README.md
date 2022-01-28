@@ -33,9 +33,3 @@ pip install -r requirements.txt
 ```bash
 pip freeze > requirements.txt
 ```
-
-### Executando um Exemplo
-
-```bash
-python .\exemplos\lendo_yml.py
-```

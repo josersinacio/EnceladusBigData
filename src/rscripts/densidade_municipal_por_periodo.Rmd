@@ -1,0 +1,140 @@
+---
+title: "Relatório de Mortalidade por Queimadura - Único Estado"
+output: pdf_document
+params: 
+    municipios_com_casos: "municipios_com_casos.csv"
+    municipios_sem_casos: "municipios_sem_casos.csv"
+    contagem_por_tipo: "contagem_por_tipo.csv"
+    diretorio: ""
+    dt_inicio: ""
+    dt_fim: ""
+    uf: ""
+header-includes:
+    - \usepackage{caption}
+editor_options:
+    chunk_output_type: console
+---
+
+\captionsetup[table]{labelformat=empty}
+
+Mortalidade por queimadura entre `r format(params$dt_inicio, '%d/%m/%Y')` e `r format(params$dt_fim, '%d/%m/%Y')` no estado `r params$uf`.
+
+_OBS: o relatório considera o municipio de residencia da vítima._
+
+## Estratificação de casos por tipo de queimadura
+
+```{r, echo = FALSE}
+arquivo <- paste0(params$diretorio, params$contagem_por_tipo, sep = "")
+contagem_por_tipo <- read.csv(arquivo)
+yrange <- range(pretty(c(0, ceiling(max(contagem_por_tipo$quantidade) * 1.25))))
+
+barplot(
+    height = contagem_por_tipo$quantidade,
+    names = c("Elétrica", "Calor/Térmica", "Química", "Geladura e Radiação"),
+    col = rgb(0.8, 0.1, 0.1, 0.6),
+    ylim = yrange
+) %>%
+    text(
+        contagem_por_tipo$quantidade,
+        contagem_por_tipo$quantidade,
+        cex = 0.8,
+        pos = 3
+    )
+
+```
+\pagebreak
+
+## Densidade municipal no período de `r format(params$dt_inicio, '%d/%m/%Y')` a `r format(params$dt_fim, '%d/%m/%Y')`
+
+### Municípios com casos registrados
+
+```{r, echo = FALSE}
+options(digits = 2)
+library(knitr)
+
+arquivo <- paste0(params$diretorio, params$municipios_com_casos, sep = "")
+
+kable(
+    read.csv(arquivo),
+    col.names = c("Município", "População", "Casos", "por 100 mil hab."),
+    format.args = list(decimal.mark = ",", big.mark = "."),
+    row.names = TRUE
+)
+
+```
+\pagebreak
+
+### Municípios sem casos registrados
+
+```{r, echo = FALSE}
+options(digits = 2)
+library(knitr)
+
+arquivo <- paste0(params$diretorio, params$municipios_sem_casos, sep = "")
+
+kable(
+    read.csv(arquivo),
+    col.names = c("Município", "População"),
+    format.args = list(decimal.mark = ",", big.mark = "."),
+    row.names = TRUE
+)
+```
+\pagebreak
+
+## Códigos CID10 que foram considerados
+
+* Queimaduras por Eletricidade:
+    + W85 - Exposição a linhas transm. de corrente elétrica
+    + W86 - Exposição a outra corrente elétrica espec.
+    + W87 - Exposição a corrente elétrica NE
+    + X33 - Vitima de raio
+
+* Queimaduras de Calor/Térmica':
+    + W35 - Explosão ou ruptura de caldeira
+    + W36 - Explosão ou ruptura de cilindro de gás
+    + W38 - Explosão ruptura outra ap. pressurizados espec.
+    + W39 - Queima de fogos de artificio
+    + W40 - Explosão de outra materiais
+    + W92 - Exposição a calor excessivo de orig. artificial
+    + X00 - Exposição a fogo não-controlado em um edifício ou outro tipo de construção
+    + X01 - Exposição a fogo não-controlado fora de um edifício ou de outro tipo de construção
+    + X02 - Exposição a fogo controlado em um edifício ou outro tipo de construção
+    + X03 - Exposição a fogo controlado fora de um edifício ou de outro tipo de construção
+    + X04 - Exposição a combustão de substância muito inflamável
+    + X05 - Exposição a combustão de roupa de dormir
+    + X06 - Exposição a combustão de outro tipo de roupa ou de acessórios
+    + X08 - Exposição a outro tipo especificado de fumaça, fogo ou chamas
+    + X09 - Exposição a tipo não especificado de fumaça, fogo ou chamas
+    + X10 - Contato com bebidas, alimentos, gordura e óleo de cozinha quentes
+    + X11 - Contato c/agua corrente quente de torneira
+    + X12 - Contato c/outros liquidos quentes
+    + X13 - Contato c/vapor dagua e c/vapores quentes
+    + X14 - Contato c/ar e gases quentes
+    + X15 - Contato c/aparelhos domesticos quentes
+    + X16 - Contato c/aquecedores radiadores e tubulacao
+    + X17 - Contato c/ motores, maquinas ou ferramentas quentes
+    + X18 - Contato c/outros metais quentes
+    + X19 - Contato com outras fontes de calor ou com substâncias quentes não especificados
+    + X30 - Exposição a calor natural excessivo
+    + X75 - Lesão autoprovocada intencionalmente por dispositivos explosivos
+    + X76 - Lesão autoprovocada intencionalmente pela fumaça, pelo fogo e por chamas
+    + X77 - Lesão autoprovocada intencionalmente por vapor de água, gases ou objetos quentes
+    + X88 - Agressão p/meio de gases e vapores
+    + X96 - Agressão p/meio de material explosivo
+    + X97 - Agressão p/meio de fumaca fogo e chamas
+    + X98 - Agressão por meio de vapor de água, gases ou objetos quentes
+    + Y25 - Contato com material explosivo, intenção não determinada
+    + Y26 - Exposição a fumaça, fogo e chamas, intenção não determinada
+    + Y27 - Exposição a vapor de água, gases ou objetos quentes, intenção não determinada
+
+* Queimaduras Químicas:
+    + X86 - Agressão por meio de substâncias corrosivas
+
+* Outros (geladura, radiação):
+    + W88 - Exposição a radiação ionizante
+    + W89 - Exposição fontes luminosas artificiais visíveis luz ultravioleta
+    + W90 - Exposição outra tipos radiação não ionizante
+    + W91 - Exposição a tipo NE de radiação
+    + W93 - Exposição frio excessivo origem artificial
+    + X31 - Exposição a frio natural excessivo
+    + X32 - Exposição a luz solar
