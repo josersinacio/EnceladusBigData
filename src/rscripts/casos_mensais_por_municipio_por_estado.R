@@ -97,6 +97,12 @@ for (i in seq_len(nrow(dados_finais))) {
 # Cria header com o nome das colunas
 dados_finais <- dados_finais[, c("Municipio", meses, "Total")]
 
+dados_finais$Municipio <- str_trunc(
+  dados_finais$Municipio,
+  30
+)
+
+
 write.csv(
   diagrama_ocorrencias,
   paste0(

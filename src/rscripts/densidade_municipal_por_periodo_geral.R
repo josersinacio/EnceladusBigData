@@ -153,6 +153,11 @@ municipios_com_casos <- municipios_com_casos[
   c("mun_res_nome", "estado", "populacao", "n", "densidade")
 ]
 
+municipios_com_casos$mun_res_nome <- str_trunc(
+  municipios_com_casos$mun_res_nome,
+  30
+)
+
 write.csv(
   desvio_padrao_por_estado,
   paste0(diretorio_de_trabalho, "desvio_padrao_por_estado.csv", sep = ""),

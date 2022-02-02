@@ -123,6 +123,10 @@ municipios_com_casos <- municipios_com_casos[,
   c("mun_res_nome", "populacao", "n", "densidade")
 ]
 
+municipios_com_casos$mun_res_nome <- str_trunc(
+  municipios_com_casos$mun_res_nome,
+  30
+)
 
 write.csv(
   municipios_com_casos,
