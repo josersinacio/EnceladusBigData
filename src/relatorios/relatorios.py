@@ -35,6 +35,6 @@ def listar_relatorios_processados():
             ))
 
     
-    relatorios.sort(key=lambda relatorio: datetime(relatorio.get('data_processamento'), reverse=True)
+    relatorios.sort(key=lambda relatorio: datetime(relatorio.get('data_processamento'), reverse=True))
 
     return relatorios
