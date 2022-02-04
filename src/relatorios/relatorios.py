@@ -2,6 +2,7 @@ import os
 import glob
 import logging
 import storage
+from datetime import datetime
 from pathlib import Path
 from default_config import defaultConfig
 
@@ -32,5 +33,8 @@ def listar_relatorios_processados():
                 uri=f"{diretorio.get('path')}/{nome_base}",
                 data_processamento=datas_processamento.get(chave_redis)
             ))
+
+    
+    relatorios.sort(key=lambda relatorio: datetime(relatorio.data_processamento), reverse=True)
 
     return relatorios
