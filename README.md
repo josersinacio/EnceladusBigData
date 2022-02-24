@@ -1,35 +1,45 @@
-# epidemiotcc
-TCC - Mineração de Informações em Epidemiologia
+## O que é?
+**Enceladus Big Data** é um sistema criado para ajudar pesquisadores da **Sociedade Brasileira de Queimaduras (SBQ)** na coleta, processamento e distribuição de dados brutos em informações úteis por meio da linguagem R, Python e demais bibliotecas que auxiliam na manipulação dos registros.
 
-![Diagrama principal](diagramas/fluxograma_principal.png)
-
-## Integrantes
-- [José Rodrigo da Silva Inácio](mailto:jose.inacio@estudante.ifb.edu.br)
-- [Josué de Paulo Viana](mailto:josue.viana@estudante.ifb.edu.br)
-
-
-## Setup Python
+## Colaboradores
+Desenvolvido por: [José Inácio Rodrigues da Silva](https://github.com/josersinacio) e [Josué de Paulo Viana](https://github.com/josuepviana)
+Orientador: [Me. Fábio Ferraz Fernandez](http://lattes.cnpq.br/9386664812059696) 
+Com a colaboração de: [Dr. Sérgio Eduardo Soares Fernandes](http://lattes.cnpq.br/9797758799188189)
 
 
-### Instalar GDAL (Necesário para PySUS)
+## Como rodar:
+**Instalar dependências primárias**
+Python v3 (`sudo apt install python python-is-python3`)
+Pip v3 (`sudo apt install python3-pip`)
+Venv (`sudo apt install python3-venv`)
+R (`sudo apt install r-base`)
+OpenSSL (`sudo apt install libcurl4-openssl-dev libssl-dev`)
+Pandoc (`sudo apt install pandoc`)
+Texline (`sudo apt install texlive`)
+Latex extras (`sudo apt install texlive-latex-extra`)
+Libfonts (`sudo apt-get install libfontconfig1-dev`)
 
-```bash
-sudo apt-get install gdal-bin
-sudo apt-get install libgdal-dev libgdal1h
-```
+**Fazer clone do projeto do Github:**
 
-### Instalar Venv
+    git clone git@github.com:josersinacio/EnceladusBigData.git
 
-```bash
-python -m venv ./venv
-venv/Scripts/activate # Windows
-source venv/bin/activate # Linux
-pip install GDAL==$(gdal-config --version) --global-option=build_ext --global-option="-I/usr/include/gdal" 
-pip install -r requirements.txt
-```
+**Criar e habilitar  um VirtualEnv para o Python:**
 
-### Exportar Venv
+	cd src
+    python -m venv venv 
+    source venv/bin/activate
 
-```bash
-pip freeze > requirements.txt
-```
+**Instalar o wheel:**
+
+    pip install wheel
+
+**Instalar as dependências do requirements.txt**
+
+    pip install -r requirements.txt
+
+**Executar o setup.py que fará uma configuração básica para o python**
+
+    sudo python setup.py
+
+***P.S.:** setup.py fará um download de CSV contendo uma estimativa populacional de 2020 no formato state,state_ibge_code,city_ibge_code,city,estimated_population.
+setup.py também instalará as biblioteca do R (incluindo o Microdatasus)*
